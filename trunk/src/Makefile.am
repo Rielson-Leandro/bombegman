@@ -1,5 +1,5 @@
 bin_PROGRAMS = bombegman
-noinst_HEADERS
+noinst_HEADERS = 
 bombegman_SOURCES = main.cpp misc.cpp gfx.cpp sfx.cpp main.h
 
 AM_CPPFLAGS = \
