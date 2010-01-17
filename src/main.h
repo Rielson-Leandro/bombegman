@@ -18,5 +18,5 @@ using namespace std;
 
 //Protótipos das funções:
 
-void init (void);
+int init (void);
 void quit (void);

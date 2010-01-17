@@ -18,7 +18,7 @@
 #include "main.h"
 
 
-void
+int
 init (void)
 {
     //inicializa a SDL
