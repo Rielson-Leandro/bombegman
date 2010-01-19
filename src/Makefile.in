@@ -52,8 +52,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_bombegman_OBJECTS = main.$(OBJEXT) misc.$(OBJEXT) gfx.$(OBJEXT) \
-	sfx.$(OBJEXT)
+am_bombegman_OBJECTS = server-core.$(OBJEXT) main.$(OBJEXT) \
+	misc.$(OBJEXT) gfx.$(OBJEXT) sfx.$(OBJEXT)
 bombegman_OBJECTS = $(am_bombegman_OBJECTS)
 bombegman_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
@@ -204,7 +204,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_HEADERS = 
-bombegman_SOURCES = main.cpp misc.cpp gfx.cpp sfx.cpp main.h
+bombegman_SOURCES = server-core.cpp main.cpp misc.cpp gfx.cpp sfx.cpp main.h
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
@@ -304,6 +304,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gfx.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/misc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/server-core.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sfx.Po@am__quote@
 
 .cpp.o:
