@@ -35,7 +35,7 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = bombegman$(EXEEXT)
+bin_PROGRAMS = bombegman$(EXEEXT) bombegman-server$(EXEEXT)
 subdir = src
 DIST_COMMON = $(noinst_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
@@ -52,10 +52,13 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 PROGRAMS = $(bin_PROGRAMS)
-am_bombegman_OBJECTS = server-core.$(OBJEXT) main.$(OBJEXT) \
-	misc.$(OBJEXT) gfx.$(OBJEXT) sfx.$(OBJEXT)
+am_bombegman_OBJECTS = main.$(OBJEXT) misc.$(OBJEXT) gfx.$(OBJEXT) \
+	sfx.$(OBJEXT)
 bombegman_OBJECTS = $(am_bombegman_OBJECTS)
 bombegman_LDADD = $(LDADD)
+am_bombegman_server_OBJECTS = server-core.$(OBJEXT)
+bombegman_server_OBJECTS = $(am_bombegman_server_OBJECTS)
+bombegman_server_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
@@ -78,8 +81,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(bombegman_SOURCES)
-DIST_SOURCES = $(bombegman_SOURCES)
+SOURCES = $(bombegman_SOURCES) $(bombegman_server_SOURCES)
+DIST_SOURCES = $(bombegman_SOURCES) $(bombegman_server_SOURCES)
 HEADERS = $(noinst_HEADERS)
 ETAGS = etags
 CTAGS = ctags
@@ -204,7 +207,8 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 noinst_HEADERS = 
-bombegman_SOURCES = server-core.cpp main.cpp misc.cpp gfx.cpp sfx.cpp main.h
+bombegman_SOURCES = main.cpp misc.cpp gfx.cpp sfx.cpp main.h
+bombegman_server_SOURCES = server-core.cpp
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
@@ -294,6 +298,9 @@ clean-binPROGRAMS:
 bombegman$(EXEEXT): $(bombegman_OBJECTS) $(bombegman_DEPENDENCIES) 
 	@rm -f bombegman$(EXEEXT)
 	$(CXXLINK) $(bombegman_OBJECTS) $(bombegman_LDADD) $(LIBS)
+bombegman-server$(EXEEXT): $(bombegman_server_OBJECTS) $(bombegman_server_DEPENDENCIES) 
+	@rm -f bombegman-server$(EXEEXT)
+	$(CXXLINK) $(bombegman_server_OBJECTS) $(bombegman_server_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
