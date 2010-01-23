@@ -5,19 +5,33 @@ extern "C"
 
 class TileSet //TODO: IMPLEMENTAR
 {
-
+  //Responsabilidades:
+  //-Gerenciamento de arquivos que serão enviados aos clientes, svg
+  //-Os clientes deveriam armazenar não só os sprites, mas o mapa inteiro
+  // para poderem jogá-lo novamente, caso gostem dele
 };
+
 class SpritesSet //TODO: IMPLEMENTAR
 {
-
+  //Responsabilidades:
+  //-Gerenciamento de arquivos que serão enviados aos clientes
+  //-Os clientes devem armazenar esses sprties em pastas de arquivos temporátios
 };
+
+/*
+  Os valores serão usados em conjunto com os operadores bit-a-bit
+ */
 enum WalkStyle
   {
-    STANDARD = 0;
+    STANDARD = 0; //<A única opção que é usada como valor absoluto
     WALLS_THROUGH = 1;
-    BOMBS_THROUGH = 1 << 1; //Entra em conflito com a opção abaixo.
-    BOMBS_KICK = 1 << 2;
+    //As opções abaixo precisam de um pouco mais de cuidado para serem usadas,
+    //pois não podem ambas estarem ativadas. Os 2 bits que são ocupados por elas
+    //são reservados para elas.
+    BOMBS_THROUGH = 1 << 2;
+    BOMBS_KICK = (1 << 2) + (1 << 1);
   };
+
 enum Direction
   {
     NORTH = 0;
@@ -26,9 +40,12 @@ enum Direction
     WEST;
   }
 
+//Preciso entrar em contaro com alguém mais experiente para discutir qual
+//namespace é o mais adequado, mas acho que o desenvolvimento do bombegman
+//será suficiente para nos mostrar isso.
 namespace bombegman
 {
-  namespace server //What is the best namespace for this module? core, maybe.
+  namespace server
   {
 
     class Map
