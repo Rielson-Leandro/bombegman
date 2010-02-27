@@ -30,6 +30,10 @@
 #include <string>
 extern "C"
 {
+/**
+   Esta macro é usado para que sejam definidos os limites dos tipos definidos em
+   stdint.
+ */
 #define __STDC_LIMIT_MACROS
 #include <stdint.h>
 #include <pthread.h>
@@ -42,6 +46,10 @@ extern "C"
 namespace server
 {
 
+  /**
+     @brief Essa é a classe base para qualquer objeto que deva estar no mapa.
+     @details Os objetos que devem ficar no mapa devem herdar da classe Resident
+   */
   class Resident
   {
   public:
@@ -49,8 +57,18 @@ namespace server
     virtual void set_y (uint_fast8_t) = 0;
   };
 
+  /**
+     @brief A classe célula representa uma célula no mapa dinâmico.
+     @details O objeto dessa célula pode conter um objeto Resident ou apontar
+     para um objeto Cell que contenha o Resident. Esta técnica é utilizada para
+     objetos que ocupam mais de uma célula. Nesse caso, um objeto Cell o
+     gerencia no mapa e outras células apontam para esta.
+   */
   class Cell
   {
+    /**
+       @brief Um ponteiro para a célula que contém um Resident.
+     */
     Cell * mirror;
     Resident * resident;
   public:
@@ -107,19 +125,67 @@ namespace server
 
   class Map
   {
+    /**
+       @brief Um objeto que armazena o arquivo de mapa, usado para representar
+       visualmente o mapa no programa cliente.
+     */
     MapFile * visual_map;
+    /**
+       @var width
+       @brief A largura do mapa estático
+     */
+    /**
+       @var height
+       @brief A "altura" do mapa estático
+     */
     uint_fast8_t width, height;
-    //static_map é  de tamanho [width][heigth] e armazena os códigos dos tiles.
-    //os objetos pertencentes a esse mapa são denominados scell, abrivação para
-    //static map cell
+    /**
+       @brief Representa o mapa semi-estático do jogo, que contém objetos que
+       são mutáveis, mas não podem mover-se e/ou assumir posições arbitrárias.
+       @details O tamanho do static_map é width * heigth. O mapa armazena
+       números inteiros sem sinais de 8-bit que representam um código, usado
+       representar os variados objetos que podem estar contidos no mapa
+       semi-estático. Os objetos pertencentes a esse mapa são denominados scell,
+       abrivação para "static map cell".
+       @see ref_scell
+     */
     uint_fast8_t * static_map;
-    //dynamic_map é 4 vezes maior que static_map e é um array de Cells
+    /**
+       @brief Uma matriz de ponteiros para objetos do tipo Cell, usada para
+       representar os objetos dinâmicos do mapa.
+       @details dynamic_map é 4 vezes maior que static_map para permitir
+       posições mais gerais. A princípio, deveríamos usar números em ponto
+       flutuante, mas isso elevaria a complexidade de implementação e diminuiria
+       o desempenho. Os objetos pertencentes a esse mapa são denominados dcell.
+       @see static_map
+     */
     Cell * dynamic_map;
-    bool is_time_infinite;
-    //o padrão é 1 minuto, que é 60000 milisegundos
-    uint_least32_t match_time, time_left;
-    //os atributos auxiliam no uso do objeto sistemas que usem threads
-    bool is_started, stop_msg;
+    /**
+       @brief Usado para indicar o limite de tempo da partida.
+       @details A unidade de tempo é milisegundos e 0 indica que não há limite
+       de tempo. O padrão é 1 minuto, 60000 milisegundos.
+       @see time_left ref_dcell
+     */
+    uint_least32_t match_time;
+    /**
+       @brief Representa o tempo restante para acabar a partida, caso haja
+       limite de tempo.
+       @see match_time
+     */
+    uint_least32_t time_left;
+    /**
+       @brief true se a partida já começou
+       @see run()
+     */
+    bool is_running;
+    /**
+       @brief Variável usada pelo método stop para comunicar-se com a thread
+       que gerencia a partida.
+       @details A variável recebe true para indicar que a partida deve ser
+       encerrada e a thread receptora age sobre essa menssagem.
+       @see stop()
+     */
+    bool stop_cmd_msg;
     /**
       @brief Desaloca o espaço alocado dinâmicamente, mudando também para onde
       ponteiros apontam.
@@ -140,16 +206,28 @@ namespace server
       @param y A coordenada no eixo y
       @return O endereço da célula
      */
-    inline Cell * ref_dcell (uint_fast8_t x, uint_fast8_t y);
+    inline Cell & ref_dcell (uint_fast8_t x, uint_fast8_t y);
     /**
       @brief Algoritmo for_each espcializado para o Mapa
+      @details Recebe um ponteiro para uma função que recebe uma célula, e as
+      coordenadas x e y dessa célula
+      @param make O ponteiro para a função
      */
     inline void for_each_scell (void (* make)(uint_fast8_t & cell, uint_fast8_t,
 					      uint_fast8_t));
   public:
     Map (uint32_t match_time);
+    /**
+       @brief Gera um mapa aleatório.
+       @details Nas primeiras versões a implementação podemos usar um algoritmo
+       genérico, mas depois devemos permitir mapas scriptáveis, que lerão do
+       arquivo de mapa parâmetros e farão um mapa pseudo-aleatório.
+     */
     void generate_random (uint_fast8_t width, uint_fast8_t height) throw ();
-    bool add_player (Animated * anima);
+    /**
+       @brief Adiciona um objeto da classe Anima na partida/mapa.
+     */
+    bool add_player (Animated * animated);
     //uma vez que o método run é chamado, a partida começa, e pode ser encerrada
     //previamente se stop for chamado em paralelo
     void run ();
@@ -163,7 +241,14 @@ namespace server
 
   class Bomber: public Animated
   {
+    /**
+       @brief O número máximo de bombas que o Bomber pode ter simultaneamente no
+       mapa.
+     */
     uint_fast8_t bombs_max;
+    /**
+       @brief O alcance do impacto de explosão das bombas que o Bomber possui.
+     */
     uint_fast8_t bombs_range;
   };
 
@@ -171,8 +256,18 @@ namespace server
   //de Animated
   class Bomb
   {
+    /**
+       @brief O Bomber que criou a bomba.
+       @details Nulo se não foi criado por um Bomber
+     */
     Bomber * owner;
+    /**
+       @brief Tempo restante para a bomba explodir.
+     */
     int_fast16_t time_left;
+    /**
+       @brief Alcance do impacto de explosão da bomba.
+     */
     uint_fast8_t range;
   };
 
