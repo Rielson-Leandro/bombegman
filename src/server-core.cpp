@@ -52,21 +52,21 @@ namespace server
     return *(static_map + x + y * width);
   }
 
-  inline Cell *
+  inline Cell &
   Map::ref_dcell (uint_fast8_t x, uint_fast8_t y)
   {
-    // Por questões de otimização de desempenho a operação de multiplicação
+    //Por questões de otimização de desempenho a operação de multiplicação
     //por 4 foi transformada em uma operação de deslocamento de bits
-    return dynamic_map + x + y * (width << 2);
+    return *(dynamic_map + x + y * (width << 2));
   }
 
   inline void
   Map::for_each_scell (void (* function)(uint_fast8_t &, uint_fast8_t,
-					 uint_fast8_t))
+                                         uint_fast8_t))
   {
     for(uint_fast8_t i = 0;i < width;++i){
       for(uint_fast8_t j = 0;j < height;++j){
-	function(ref_scell(i,j),i,j);
+        function(ref_scell(i,j),i,j);
       }
     }
   }
@@ -103,12 +103,12 @@ namespace server
   {
     try{
       if(is_started){
-	throw RunningMatchException();
-	return;
+        throw RunningMatchException();
+        return;
       }
       if(((width * 4) > UINT_FAST8_MAX) || ((height * 4) > UINT_FAST8_MAX)){
-	throw LargeMapException();
-	return;
+        throw LargeMapException();
+        return;
       }
     }
     catch(...){
