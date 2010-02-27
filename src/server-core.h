@@ -9,12 +9,12 @@
    under the terms of the GNU General Public License as published by the
    Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-
+   \n
    bombegman is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
    See the GNU General Public License for more details.
-
+   \n
    You should have received a copy of the GNU General Public License along
    with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -43,6 +43,10 @@ extern "C"
 #include "berror.h"
 #include "utils.h"
 
+/**
+   @brief Contém todos os procedimentos necessários para implementação de um
+   servidor compatível com o futuro protocolo bombegman.
+ */
 namespace server
 {
 
@@ -70,31 +74,77 @@ namespace server
        @brief Um ponteiro para a célula que contém um Resident.
      */
     Cell * mirror;
+    /**
+       @brief O objeto dinâmico que está na célula, que está no mapa.
+     */
     Resident * resident;
   public:
     Cell ();
   };
 
+  /**
+     @brief Objeto que herda de Resident e pode se mover autonomamente pelo
+     mapa.
+     @todo Modo de representar o conjunto de sprites.
+   */
   class Animated: public Resident
   {
     //sprites_set
+    /**
+       @brief Número de vezes que o Animated pode retornar ao mapa após ser
+       explodido.
+     */
     uint_fast8_t lives;
+    /**
+       @brief true se o Animated não sai do mapa após ser explodido.
+     */
     bool immortal;
+    /**
+       @brief Número de explosões necessárias para retirar o Animated do mapa.
+     */
     uint_fast8_t hit_points;
-    //tempo restante em milisegundos para que o Anima possa mover-se novamente
+    /**
+       @brief Tempo restante, em milisegundos, para o Animated poder mover-se
+       autonomamente novamente.
+       @details O animated pode ser paralizado, e, após tal fato ocorrer, ele
+       só poderá mover-se novamente após x milisegundos.
+     */
     uint_fast16_t paralyzed_time;
-    //  enum WalkOptions walk_options;
+    //enum WalkOptions walk_options;
+    /**
+       @brief Velocidade do Animated.
+       @todo Definir unidade de medida de velocidade.
+     */
     uint_fast8_t speed;
   };
 
+  /**
+     @brief Abstração de todos os procedimentos de manipulação do arquivo de
+     mapa.
+     @details Responsável por recuperar os parâmetros de configuração do mapa,
+     receber um mapa, enviar um mapa e gerenciar os arquivos gráficos (que
+     estarão originalmente no formato svg, mas deverão ser convertidos para
+     png).
+   */
   class MapFile
   {
     //Por motivos de desempenho, usaremos EBML para representar os mapas
     //utils::EBML:IStream file;
   public:
+    /**
+       @brief Um dos construtores de MapFile.
+       @details Falta definir quais serão as outras possíveis maneiras de
+       inicializar um arquivo de mapa (via rede, por exemplo).
+     */
     MapFile (std::string ebml_file);
   };
 
+  /**
+     @brief Iterador de MapDir.
+     @details Usado para navegar entre os arquivos individuais de uma pasta
+     contendo vários arquivos de mapa. \n N
+     @see MapDir
+   */
   class MapDirIterator
   {
     utils::XML::IStream dir_stream;
@@ -104,13 +154,46 @@ namespace server
     MapDirIterator (utils::XML::IStream dir);
     MapDirIterator (const MapDirIterator &);
     virtual ~MapDirIterator ();
-    MapFile & operator* ();
-    const MapDirIterator & operator++ ();
-    const MapDirIterator & operator-- ();
-    const MapDirIterator & operator+ (size_t offset);
-    const MapDirIterator & operator- (size_t offset);
+    /**
+       @brief Referencia o arquivo de mapa apontado pelo iterador.
+     */
+    MapFile & operator* () const;
+    /**
+       @brief Faz o iterador acessar o arquivo de mapa seguinte.
+       @details Se o iterador estiver acessando o último arquivo de mapa ele
+       continua apontando para o mesmo arquivo e apenas retorna ele mesmo.
+       @see operator--()
+     */
+    MapDirIterator & operator++ ();
+    /**
+       @brief Faz o iterador acessar o arquivo de mapa anterior.
+       @details Se o iterador estiver acessando o primeiro arquivo de mapa ele
+       continua apontando para o mesmo arquivo e apenas retorna ele mesmo.
+       @see operator++()
+     */
+    MapDirIterator & operator-- ();
+    /**
+       @brief Faz o iterador apontar para o arquivo de mapa que está \p offset
+       arquivos a frente.
+     */
+    MapDirIterator & operator+ (size_t offset);
+    /**
+       @brief Faz o iterador apontar para o arquivo de mapa que está \p offset
+       arquivos àtras.
+     */
+    MapDirIterator & operator- (size_t offset);
   };
 
+  /**
+     @brief Abstração sobre uma pasta contendo vários arquivos de mapa.
+     @details Os arquivos deverão estar codificados como EBML. \n No momento
+     "está usando" arquivos XML para "reduzir" a complexidade, mas a coisa certa
+     a fazer é procurar pelos arquivos que correspondem ao formato, diretamente
+     da pasta funcional.
+     @todo Eliminar a necessidade de usar arquivos XML e talvez seja necessário
+     tornar essa classe ou o iterador thread-safe.
+     @see MapDirIterator
+   */
   class MapDir
   {
     std::string dir_index_file_name;
@@ -119,7 +202,13 @@ namespace server
     MapDir (std::string);
     MapDir (const MapDir &);
     ~MapDir ();
+    /**
+       @return Retorna um iterador para o primeiro arquivo de mapa na pasta.
+     */
     MapDirIterator begin ();
+    /**
+       @return Retorna um iterador para o último arquivo de mapa na pasta.
+     */
     MapDirIterator end ();
   };
 
@@ -239,6 +328,10 @@ namespace server
     STANDARD = 0;
     }*/
 
+  /**
+     @brief Animated capaz de colocar bombas no mapa.
+     @details Finalmente temos o nosso bomberman =) .
+   */
   class Bomber: public Animated
   {
     /**
@@ -252,8 +345,11 @@ namespace server
     uint_fast8_t bombs_range;
   };
 
-  //Quando o jogo estiver um pouco mais completo fará sentido fazer Bomb herdar
-  //de Animated
+  /**
+     @brief A bomba que pode ser colocada no mapa.
+     @todo Quando o jogo estiver mais completo fará sentido fazer Bomb herdar de
+     Animated.
+   */
   class Bomb
   {
     /**

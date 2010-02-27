@@ -9,12 +9,12 @@
    under the terms of the GNU General Public License as published by the
    Free Software Foundation, either version 3 of the License, or
    (at your option) any later version.
-
+   \n
    bombegman is distributed in the hope that it will be useful, but
    WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
    See the GNU General Public License for more details.
-
+   \n
    You should have received a copy of the GNU General Public License along
    with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
@@ -106,7 +106,7 @@ namespace server
         throw RunningMatchException();
         return;
       }
-      if(((width * 4) > UINT_FAST8_MAX) || ((height * 4) > UINT_FAST8_MAX)){
+      if((width > (UINT_FAST8_MAX >> 2)) || (height > (UINT_FAST8_MAX >> 2))){
         throw LargeMapException();
         return;
       }
