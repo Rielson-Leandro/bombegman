@@ -11,10 +11,15 @@ SOURCES += main.cc \
     interpreter.cc \
     drawer.cc \
     formatter.cc \
-    inputhandler.cc
+    inputhandler.cc \
+    connectdialog.cc
 HEADERS += mainwindow.h \
     world.h \
     interpreter.h \
     drawer.h \
     formatter.h \
-    inputhandler.h
+    inputhandler.h \
+    connectdialog.h
+
+RESOURCES += \
+    std.qrc

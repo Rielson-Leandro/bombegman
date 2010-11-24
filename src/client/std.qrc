@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>gfx/bomb0.png</file>
+        <file>gfx/bomb1.png</file>
+        <file>gfx/bomb2.png</file>
+        <file>gfx/bomb3.png</file>
+        <file>gfx/bomb4.png</file>
+        <file>gfx/bomb5.png</file>
+        <file>gfx/bomb6.png</file>
+        <file>gfx/bombere0.png</file>
+        <file>gfx/bombere1.png</file>
+        <file>gfx/bombere2.png</file>
+        <file>gfx/bombern0.png</file>
+        <file>gfx/bombern1.png</file>
+        <file>gfx/bombern2.png</file>
+        <file>gfx/bombers0.png</file>
+        <file>gfx/bombers1.png</file>
+        <file>gfx/bombers2.png</file>
+        <file>gfx/bomberw0.png</file>
+        <file>gfx/bomberw1.png</file>
+        <file>gfx/bomberw2.png</file>
+    </qresource>
+</RCC>
