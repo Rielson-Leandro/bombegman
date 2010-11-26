@@ -1,6 +1,7 @@
 #include "interpreter.h"
 
-Interpreter::Interpreter(QObject *parent) :
-    QObject(parent)
+Interpreter::Interpreter(QTcpSocket *socket, QObject *parent) :
+    QObject(parent),
+    socket(socket)
 {
 }

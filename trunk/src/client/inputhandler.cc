@@ -1,6 +1,7 @@
 #include "inputhandler.h"
 
-InputHandler::InputHandler(QObject *parent) :
-    QObject(parent)
+InputHandler::InputHandler(QGraphicsScene *scene, QObject *parent) :
+    QObject(parent),
+    scene(scene)
 {
 }

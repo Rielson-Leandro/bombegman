@@ -1,6 +1,8 @@
 #include "drawer.h"
+#include <QGraphicsScene>
 
-Drawer::Drawer(QObject *parent) :
-    QObject(parent)
+Drawer::Drawer(QGraphicsScene *scene, QObject *parent) :
+    QObject(parent),
+    scene(scene)
 {
 }
