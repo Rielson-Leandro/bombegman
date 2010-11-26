@@ -1,11 +1,16 @@
 #ifndef WORLD_H
 #define WORLD_H
 
-#include <QObject>
 
-class MapObject;
-class QPoint;
-class QTcpSocket;
+#include <QTcpSocket>
+#include <QTcpServer>
+#include <QObject>
+#include <QSettings>
+
+#include "player.h"
+#include "mapobject.h"
+
+
 
 class World : public QObject
 {
@@ -21,9 +26,11 @@ public:
     // time is in miliseconds
     void startMatch(int matchTimeLimit);
 
-signals:
+    void listen(QHostAddress hostAddress, quint16 port);
 
-public slots:
+private:
+    QTcpServer *server;
+
 
 };
 

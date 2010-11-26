@@ -20,3 +20,6 @@ HEADERS += world.h \
     player.h \
     bomb.h \
     bomber.h
+
+OTHER_FILES += \
+    server.ini
