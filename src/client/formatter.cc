@@ -1,6 +1,7 @@
 #include "formatter.h"
 
-Formatter::Formatter(QObject *parent) :
-    QObject(parent)
+Formatter::Formatter(QTcpSocket *socket, QObject *parent) :
+    QObject(parent),
+    socket(socket)
 {
 }

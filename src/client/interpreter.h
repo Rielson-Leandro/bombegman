@@ -3,16 +3,20 @@
 
 #include <QObject>
 
+class QTcpSocket;
+
 class Interpreter : public QObject
 {
 Q_OBJECT
 public:
-    explicit Interpreter(QObject *parent = 0);
+    explicit Interpreter(QTcpSocket *socket, QObject *parent = 0);
 
 signals:
 
 public slots:
 
+private:
+    QTcpSocket *socket;
 };
 
 #endif // INTERPRETER_H
