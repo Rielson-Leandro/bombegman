@@ -9,30 +9,24 @@
 static const QIntValidator validator(0, 65535, NULL);
 
 ConnectDialog::ConnectDialog(QWidget *parent) :
-        QDialog(parent),
+        QWidget(parent),
         m_hostLineEdit(new QLineEdit),
         m_portLineEdit(new QLineEdit)
 {
-    m_hostLineEdit->setPlaceholderText(QObject::tr("Host address"));
+//    m_hostLineEdit->setPlaceholderText(QObject::tr("Host address"));
     m_hostLineEdit->setText("localhost");
-    m_portLineEdit->setPlaceholderText(QObject::tr("Port address"));
+//    m_portLineEdit->setPlaceholderText(QObject::tr("Port address"));
     m_portLineEdit->setValidator(&validator);
 
     QVBoxLayout *mainLayout = new QVBoxLayout;
-    QHBoxLayout *buttonGroupLayout = new QHBoxLayout;
 
-    QPushButton *buttons[2] = {new QPushButton(QObject::tr("Connect")),
-                               new QPushButton(QObject::tr("Cancel"))};
+    QPushButton *connectButton = new QPushButton(QObject::tr("Connect"));
 
-    connect(buttons[0], SIGNAL(clicked()), this, SLOT(onConnectButtonClicked()));
-    connect(buttons[1], SIGNAL(clicked()), this, SLOT(reject()));
-
-    buttonGroupLayout->addWidget(buttons[0]);
-    buttonGroupLayout->addWidget(buttons[1]);
+    connect(connectButton, SIGNAL(clicked()), this, SLOT(onConnectButtonClicked()));
 
     mainLayout->addWidget(m_hostLineEdit);
     mainLayout->addWidget(m_portLineEdit);
-    mainLayout->addLayout(buttonGroupLayout);
+    mainLayout->addWidget(connectButton);
 
     setLayout(mainLayout);
 }
@@ -53,7 +47,7 @@ void ConnectDialog::onConnectButtonClicked()
         return;
     }
 
-    QDialog::accept();
+    emit connectionRequested();
 }
 
 QString ConnectDialog::hostAddress() const

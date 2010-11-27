@@ -1,13 +1,13 @@
 #ifndef CONNECTDIALOG_H
 #define CONNECTDIALOG_H
 
-#include <QDialog>
+#include <QWidget>
 
 class QLineEdit;
 class QPushButton;
 class QHBoxLayout;
 
-class ConnectDialog : public QDialog
+class ConnectDialog : public QWidget
 {
     Q_OBJECT
 public:
@@ -15,6 +15,9 @@ public:
 
     QString hostAddress() const;
     int port() const;
+
+signals:
+    void connectionRequested();
 
 private slots:
     void onConnectButtonClicked();

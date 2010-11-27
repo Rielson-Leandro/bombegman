@@ -1,28 +1,30 @@
 #include "mainwindow.h"
-#include "connectdialog.h"
 #include "world.h"
 #include <QHostAddress>
-#include <QGraphicsScene>
+#include <QGraphicsView>
+#include "menuscene.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
-    scene(new QGraphicsScene),
-    world(new World(scene))
+    menuScene(new MenuScene),
+    gameScene(new QGraphicsScene),
+    view(new QGraphicsView(menuScene)),
+    world(new World(gameScene))
 {
-    show();
-    ConnectDialog *d = new ConnectDialog;
-
-    while (!world->connectToHost(QHostAddress(d->hostAddress()), d->port())) {
-        d->exec();
-        if (d->result() == QDialog::Rejected) {
-            hide();
-            break;
-        }
-    }
-
-    delete d;
+    view->viewport()->setFixedSize(800, 600);
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    view->setRenderHint(QPainter::Antialiasing);
+    setCentralWidget(view);
 }
 
 MainWindow::~MainWindow()
 {
+}
+
+void MainWindow::onConnectionRequested(const QHostAddress &address, quint16 port)
+{
+    if (world->connectToHost(address, port)) {
+        view->setScene(gameScene);
+    }
 }
