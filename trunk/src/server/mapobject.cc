@@ -1,11 +1,11 @@
 #include "mapobject.h"
 
-MapObject::MapObject(QObject *parent) :
+MapEntity::MapEntity(QObject *parent) :
     QObject(parent)
 {
 }
 
-void MapObject::setPos(const QPoint &p)
+void MapEntity::setPos(const QPoint &p)
 {
     if (m_pos != p) {
         m_pos = p;
@@ -13,11 +13,11 @@ void MapObject::setPos(const QPoint &p)
     }
 }
 
-void MapObject::explode()
+void MapEntity::explode()
 {
 }
 
-bool MapObject::obstrutive() const
+bool MapEntity::obstrutive() const
 {
     return false;
 }
