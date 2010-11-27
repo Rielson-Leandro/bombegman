@@ -4,11 +4,11 @@
 #include <QObject>
 #include <QPoint>
 
-class MapObject : public QObject
+class MapEntity : public QObject
 {
 Q_OBJECT
 public:
-    explicit MapObject(QObject *parent = 0);
+    explicit MapEntity(QObject *parent = 0);
 
     QPoint pos() const;
 
@@ -29,7 +29,7 @@ private:
     // int currentSprite
 };
 
-inline QPoint MapObject::pos() const
+inline QPoint MapEntity::pos() const
 {
     return m_pos;
 }

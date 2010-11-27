@@ -18,7 +18,7 @@ Q_OBJECT
 public:
     explicit World(QObject *parent = 0);
 
-    void requestMovement(MapObject *, const QPoint &);
+    void requestMovement(MapEntity *, const QPoint &);
     void requestExplosion(const QPoint &);
 
     void addPlayer(QTcpSocket *);
