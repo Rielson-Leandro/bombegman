@@ -1,5 +1,5 @@
-#ifndef MAPOBJECT_H
-#define MAPOBJECT_H
+#ifndef MAPENTITY_H
+#define MAPENTITY_H
 
 #include <QObject>
 #include <QPoint>
@@ -34,4 +34,4 @@ inline QPoint MapEntity::pos() const
     return m_pos;
 }
 
-#endif // MAPOBJECT_H
+#endif // MAPENTITY_H

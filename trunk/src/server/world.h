@@ -8,7 +8,7 @@
 #include <QSettings>
 
 #include "player.h"
-#include "mapobject.h"
+#include "mapentity.h"
 
 
 

@@ -1,4 +1,4 @@
-#include "mapobject.h"
+#include "mapentity.h"
 
 MapEntity::MapEntity(QObject *parent) :
     QObject(parent)
