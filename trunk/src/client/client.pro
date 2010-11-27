@@ -12,14 +12,16 @@ SOURCES += main.cc \
     drawer.cc \
     formatter.cc \
     inputhandler.cc \
-    connectdialog.cc
+    connectdialog.cc \
+    menuscene.cc
 HEADERS += mainwindow.h \
     world.h \
     interpreter.h \
     drawer.h \
     formatter.h \
     inputhandler.h \
-    connectdialog.h
-
-RESOURCES += \
-    std.qrc
+    connectdialog.h \
+    menuscene.h \
+    protocol.h \
+    mapentity.h
+RESOURCES += std.qrc

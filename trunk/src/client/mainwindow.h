@@ -4,7 +4,9 @@
 #include <QtGui/QMainWindow>
 
 class QGraphicsScene;
+class QGraphicsView;
 class World;
+class QHostAddress;
 
 class MainWindow : public QMainWindow
 {
@@ -14,8 +16,13 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void onConnectionRequested(const QHostAddress &address, quint16 port);
+
 private:
-    QGraphicsScene *scene;
+    QGraphicsScene *menuScene;
+    QGraphicsScene *gameScene;
+    QGraphicsView *view;
     World *world;
 };
 

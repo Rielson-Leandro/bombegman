@@ -2,6 +2,7 @@
 #define FORMATTER_H
 
 #include <QObject>
+#include "mapentity.h"
 
 class QTcpSocket;
 
@@ -11,9 +12,9 @@ Q_OBJECT
 public:
     explicit Formatter(QTcpSocket *socket, QObject *parent = 0);
 
-signals:
-
 public slots:
+    void requestMovement(MapEntity entity, QPoint newPos);
+    void requestBomb();
 
 private:
     QTcpSocket *socket;
