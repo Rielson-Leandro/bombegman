@@ -10,13 +10,13 @@ TEMPLATE = app
 SOURCES += main.cc \
     world.cc \
     map.cc \
-    mapobject.cc \
+    mapentity.cc \
     player.cc \
     bomb.cc \
     bomber.cc
 HEADERS += world.h \
     map.h \
-    mapobject.h \
+    mapentity.h \
     player.h \
     bomb.h \
     bomber.h
