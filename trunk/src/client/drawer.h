@@ -2,6 +2,7 @@
 #define DRAWER_H
 
 #include <QObject>
+#include "mapentity.h"
 
 class QGraphicsScene;
 
@@ -11,9 +12,10 @@ Q_OBJECT
 public:
     explicit Drawer(QGraphicsScene *scene, QObject *parent = 0);
 
-signals:
-
 public slots:
+    void requestMovement(MapEntity entity, QPoint newPos);
+    void requestNewEntity(MapEntity entity, QPoint pos);
+    void requestHavoc(MapEntity entity);
 
 private:
     QGraphicsScene *scene;

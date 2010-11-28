@@ -3,13 +3,13 @@
 #include <QHostAddress>
 #include <QGraphicsView>
 #include "menuscene.h"
+#include "gamescene.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent),
     menuScene(new MenuScene),
-    gameScene(new QGraphicsScene),
     view(new QGraphicsView(menuScene)),
-    world(new World(gameScene))
+    world(new World)
 {
     view->viewport()->setFixedSize(800, 600);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -25,6 +25,6 @@ MainWindow::~MainWindow()
 void MainWindow::onConnectionRequested(const QHostAddress &address, quint16 port)
 {
     if (world->connectToHost(address, port)) {
-        view->setScene(gameScene);
+        view->setScene(world->scene());
     }
 }

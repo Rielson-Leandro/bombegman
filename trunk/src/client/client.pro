@@ -13,7 +13,8 @@ SOURCES += main.cc \
     formatter.cc \
     inputhandler.cc \
     connectdialog.cc \
-    menuscene.cc
+    menuscene.cc \
+    gamescene.cc
 HEADERS += mainwindow.h \
     world.h \
     interpreter.h \
@@ -23,5 +24,6 @@ HEADERS += mainwindow.h \
     connectdialog.h \
     menuscene.h \
     protocol.h \
-    mapentity.h
+    mapentity.h \
+    gamescene.h
 RESOURCES += std.qrc
