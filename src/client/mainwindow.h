@@ -21,7 +21,6 @@ private slots:
 
 private:
     QGraphicsScene *menuScene;
-    QGraphicsScene *gameScene;
     QGraphicsView *view;
     World *world;
 };

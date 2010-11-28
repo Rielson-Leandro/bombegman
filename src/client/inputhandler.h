@@ -2,21 +2,23 @@
 #define INPUTHANDLER_H
 
 #include <QObject>
+#include "mapentity.h"
 
 class QGraphicsScene;
+class QKeyEvent;
 
 class InputHandler : public QObject
 {
 Q_OBJECT
 public:
-    explicit InputHandler(QGraphicsScene *scene, QObject *parent = 0);
+    explicit InputHandler(QObject *parent = 0);
+
+    void keyPressEvent(QKeyEvent *e);
+    void keyReleaseEvent(QKeyEvent *e);
 
 signals:
-
-public slots:
-
-private:
-    QGraphicsScene *scene;
+    void requestMovement(MapEntity entity, QPoint newPos);
+    void requestBomb();
 };
 
 #endif // INPUTHANDLER_H

@@ -4,14 +4,16 @@
 #include "formatter.h"
 #include "drawer.h"
 #include "inputhandler.h"
+#include "gamescene.h"
 
-World::World(QGraphicsScene *scene, QObject *parent) :
+World::World(QObject *parent) :
     QObject(parent),
+    inputHandler(new InputHandler),
+    gameScene(new GameScene(inputHandler)),
+    drawer(new Drawer(gameScene)),
     socket(new QTcpSocket),
     interpreter(new Interpreter(socket)),
-    formatter(new Formatter(socket)),
-    drawer(new Drawer(scene)),
-    inputHandler(new InputHandler(scene))
+    formatter(new Formatter(socket))
 {
 }
 
@@ -24,4 +26,9 @@ bool World::connectToHost(const QHostAddress &address, quint16 port)
 {
     socket->connectToHost(address, port);
     return socket->waitForConnected();
+}
+
+QGraphicsScene *World::scene()
+{
+    return gameScene;
 }
