@@ -2,29 +2,34 @@
 #define CONNECTDIALOG_H
 
 #include <QWidget>
+#include <QHostAddress>
 
-class QLineEdit;
-class QPushButton;
-class QHBoxLayout;
+class QTcpSocket;
+class QListWidget;
 
 class ConnectDialog : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ConnectDialog(QWidget *parent = 0);
-
-    QString hostAddress() const;
-    int port() const;
+    explicit ConnectDialog(const QHostAddress &add, quint16 port,
+                           QWidget *parent = 0);
+    ~ConnectDialog();
 
 signals:
-    void connectionRequested();
+    void connectionRequested(QHostAddress address, quint16 port);
 
 private slots:
     void onConnectButtonClicked();
+    void onRefreshButtonCLicked();
+    void onConnected();
+    void onReadyRead();
 
 private:
-    QLineEdit *m_hostLineEdit;
-    QLineEdit *m_portLineEdit;
+    QListWidget *list;
+    QTcpSocket *socket;
+    QByteArray buffer;
+    QHostAddress host;
+    quint16 port;
 };
 
 #endif // CONNECTDIALOG_H

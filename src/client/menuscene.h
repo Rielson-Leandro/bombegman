@@ -16,7 +16,7 @@ signals:
     void connectionRequested(QHostAddress, quint16);
 
 private slots:
-    void onConnectionRequested();
+    void onConnectionRequested(const QHostAddress &host, quint16 port);
 
 private:
     ConnectDialog *connectionDialog;
