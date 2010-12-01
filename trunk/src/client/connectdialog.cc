@@ -1,61 +1,82 @@
 #include "connectdialog.h"
-#include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLineEdit>
+#include <QVBoxLayout>
+#include <QListWidget>
 #include <QPushButton>
-#include <QMessageBox>
-#include <QIntValidator>
+#include <QTcpSocket>
 
-static const QIntValidator validator(0, 65535, NULL);
-
-ConnectDialog::ConnectDialog(QWidget *parent) :
+ConnectDialog::ConnectDialog(const QHostAddress &add, quint16 port,
+                             QWidget *parent) :
         QWidget(parent),
-        m_hostLineEdit(new QLineEdit),
-        m_portLineEdit(new QLineEdit)
+        list(new QListWidget),
+        socket(new QTcpSocket),
+        host(add),
+        port(port)
 {
-//    m_hostLineEdit->setPlaceholderText(QObject::tr("Host address"));
-    m_hostLineEdit->setText("localhost");
-//    m_portLineEdit->setPlaceholderText(QObject::tr("Port address"));
-    m_portLineEdit->setValidator(&validator);
-
-    QVBoxLayout *mainLayout = new QVBoxLayout;
-
     QPushButton *connectButton = new QPushButton(QObject::tr("Connect"));
-
     connect(connectButton, SIGNAL(clicked()), this, SLOT(onConnectButtonClicked()));
 
-    mainLayout->addWidget(m_hostLineEdit);
-    mainLayout->addWidget(m_portLineEdit);
-    mainLayout->addWidget(connectButton);
+    QPushButton *refreshButton = new QPushButton(QObject::tr("Refresh"));
+    connect(refreshButton, SIGNAL(clicked()), this, SLOT(onRefreshButtonCLicked()));
 
-    setLayout(mainLayout);
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(connectButton);
+    buttonLayout->addWidget(refreshButton);
+
+    connect(socket, SIGNAL(connected()), this, SLOT(onConnected()));
+    connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+
+    QVBoxLayout *l = new QVBoxLayout;
+    l->addWidget(list);
+    l->addLayout(buttonLayout);
+
+    setLayout(l);
+}
+
+ConnectDialog::~ConnectDialog()
+{
+    delete list;
+    delete socket;
 }
 
 void ConnectDialog::onConnectButtonClicked()
 {
-    if (m_hostLineEdit->text().isEmpty()) {
-        QMessageBox::warning(this,
-                             QObject::tr("Host address required"),
-                             QObject::tr("Please enter the host address"));
-        return;
+    if (QListWidgetItem *i = list->currentItem()) {
+        emit connectionRequested(QHostAddress(i->data(Qt::UserRole).toString()),
+                                 i->data(Qt::UserRole + 1).toInt());
     }
-
-    if (m_portLineEdit->text().isEmpty()) {
-        QMessageBox::warning(this,
-                             QObject::tr("Port address required"),
-                             QObject::tr("Please enter the port address"));
-        return;
-    }
-
-    emit connectionRequested();
 }
 
-QString ConnectDialog::hostAddress() const
+void ConnectDialog::onRefreshButtonCLicked()
 {
-    return m_hostLineEdit->text();
+    list->clear();
+    socket->connectToHost(host, port);
 }
 
-int ConnectDialog::port() const
+void ConnectDialog::onConnected()
 {
-    return m_portLineEdit->text().toInt();
+    socket->write("LISTALL bombegman/0\n");
+}
+
+void ConnectDialog::onReadyRead()
+{
+    buffer.append(socket->readAll());
+    for (int i = buffer.indexOf('\n');buffer.indexOf('\n') != -1;i = buffer.indexOf('\n')) {
+        if (buffer[0] == '\n') {
+            buffer.remove(0, 1);
+            break;
+        }
+
+        QList<QByteArray> game = buffer.left(i).split(' ');
+        buffer.remove(0, i + 1);
+
+        QListWidgetItem *item = new QListWidgetItem(QString(game[0]) + ':'
+                                                    + QString(game[1]) + ' '
+                                                    + QString(game[2]) + '/'
+                                                    + QString(game[3]));
+
+        item->setData(Qt::UserRole, QString(game[0]));
+        item->setData(Qt::UserRole + 1, game[1].toInt());
+        list->addItem(item);
+    }
 }
