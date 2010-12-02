@@ -9,18 +9,14 @@ Formatter::Formatter(QTcpSocket *socket, QObject *parent) :
 {
 }
 
-void Formatter::requestMovement(MapEntity entity, QPoint newPos)
+void Formatter::requestMovement(char dir)
 {
-    const char buffer[4] = {MOVEMENT,
-                            entity.type,
-                            entity.id,
-                            MapEntity::getByte(newPos)};
-    socket->write(buffer, 4);
+    const char buffer[2] = {MOVEMENT, dir};
+    socket->write(buffer, 2);
 }
 
 void Formatter::requestInput(char type)
 {
-    char msg[3] = {INPUT, '\0', '\0'};
-    msg[1] = type;
-    socket->write(msg);
+    char buffer[2] = {INPUT, type};
+    socket->write(buffer, 2);
 }
