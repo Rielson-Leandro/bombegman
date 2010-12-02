@@ -18,7 +18,9 @@ void Formatter::requestMovement(MapEntity entity, QPoint newPos)
     socket->write(buffer, 4);
 }
 
-void Formatter::requestBomb()
+void Formatter::requestInput(char type)
 {
-    socket->write("NB");
+    char msg[3] = {INPUT, '\0', '\0'};
+    msg[1] = type;
+    socket->write(msg);
 }
