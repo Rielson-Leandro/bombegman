@@ -15,6 +15,11 @@ World::World(QObject *parent) :
     interpreter(new Interpreter(socket)),
     formatter(new Formatter(socket))
 {
+    connect(inputHandler, SIGNAL(requestMovement(char)), formatter, SLOT(requestMovement(char)));
+    connect(inputHandler, SIGNAL(requestInput(char)), formatter, SLOT(requestInput(char)));
+    connect(interpreter, SIGNAL(newEntityRequest(MapEntity,QPoint))), drawer, SLOT(requestNewEntity(MapEntity,QPoint));
+    connect(interpreter, SIGNAL(movementRequest(MapEntity,QPoint)), drawer, SLOT(requestMovement(MapEntity,QPoint)));
+    connect(interpreter, SIGNAL(havocRequest(MapEntity)), drawer, SLOT(requestHavoc(MapEntity)));
 }
 
 World::~World()

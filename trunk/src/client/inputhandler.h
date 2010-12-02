@@ -17,7 +17,7 @@ public:
     void keyReleaseEvent(QKeyEvent *e);
 
 signals:
-    void requestMovement(MapEntity entity, QPoint newPos);
+    void requestMovement(char dir);
     void requestInput(char type);
 };
 
