@@ -18,7 +18,7 @@ public:
 
 signals:
     void requestMovement(MapEntity entity, QPoint newPos);
-    void requestBomb();
+    void requestInput(char type);
 };
 
 #endif // INPUTHANDLER_H

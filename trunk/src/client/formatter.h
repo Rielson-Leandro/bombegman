@@ -14,7 +14,7 @@ public:
 
 public slots:
     void requestMovement(MapEntity entity, QPoint newPos);
-    void requestBomb();
+    void requestInput(char type);
 
 private:
     QTcpSocket *socket;
