@@ -1,13 +1,13 @@
 #ifndef BOMBER_H
 #define BOMBER_H
 
-#include <QObject>
+#include "mapentity.h"
 
-class Bomber : public QObject
+class Bomber : public MapEntity
 {
 Q_OBJECT
 public:
-    explicit Bomber(QObject *parent = 0);
+    explicit Bomber(World *parent = 0);
 
 signals:
 

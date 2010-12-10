@@ -20,3 +20,9 @@ void Formatter::requestInput(char type)
     char buffer[2] = {INPUT, type};
     socket->write(buffer, 2);
 }
+
+void Formatter::requestMatch()
+{
+    static const char buffer[2] = {REQUEST, MATCH};
+    socket->write(buffer, 2);
+}

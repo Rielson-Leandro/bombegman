@@ -1,6 +1,3 @@
-# -------------------------------------------------
-# Project created by QtCreator 2010-11-22T13:38:26
-# -------------------------------------------------
 QT += network
 QT -= gui
 TARGET = server
@@ -13,13 +10,14 @@ SOURCES += main.cc \
     mapentity.cc \
     player.cc \
     bomb.cc \
-    bomber.cc
+    bomber.cc \
+    rand.cc
 HEADERS += world.h \
     map.h \
     mapentity.h \
     player.h \
     bomb.h \
-    bomber.h
+    bomber.h \
+    rand.h
 
-OTHER_FILES += \
-    server.ini
+OTHER_FILES +=

@@ -14,7 +14,8 @@ enum Action
     MOVEMENT   = 'M',
     NEW_ENTITY = 'N',
     DESTROYED  = 'D',
-    INPUT      = 'I'
+    INPUT      = 'I',
+    REQUEST    = 'R'
 };
 
 enum Input
@@ -29,6 +30,11 @@ enum Direction
     NORTH = 'N',
     SOUTH = 'S',
     WEST  = 'W'
+};
+
+enum
+{
+    MATCH = 'M'
 };
 
 #endif // PROTOCOL_H

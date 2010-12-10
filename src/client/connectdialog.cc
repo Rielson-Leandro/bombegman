@@ -55,7 +55,7 @@ void ConnectDialog::onRefreshButtonCLicked()
 
 void ConnectDialog::onConnected()
 {
-    socket->write("LISTALL bombegman/0\n");
+    socket->write("LISTALL bombegman/0.2\n");
 }
 
 void ConnectDialog::onReadyRead()

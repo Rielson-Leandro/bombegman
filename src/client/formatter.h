@@ -16,6 +16,8 @@ public slots:
     void requestMovement(char dir);
     void requestInput(char type);
 
+    void requestMatch();
+
 private:
     QTcpSocket *socket;
 };

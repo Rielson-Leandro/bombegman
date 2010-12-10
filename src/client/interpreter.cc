@@ -6,7 +6,20 @@ Interpreter::Interpreter(QTcpSocket *socket, QObject *parent) :
     QObject(parent),
     socket(socket)
 {
-    connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    if (socket)
+        connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+}
+
+void Interpreter::setSocket(QTcpSocket *socket, bool deleteOldSoscket)
+{
+    disconnect(this->socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    buffer.clear();
+    if (socket)
+        connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    if (deleteOldSoscket)
+        delete this->socket;
+
+    this->socket = socket;
 }
 
 void Interpreter::onReadyRead()

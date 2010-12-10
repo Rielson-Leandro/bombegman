@@ -30,7 +30,12 @@ World::~World()
 bool World::connectToHost(const QHostAddress &address, quint16 port)
 {
     socket->connectToHost(address, port);
-    return socket->waitForConnected();
+    if (socket->waitForConnected()) {
+        formatter->requestMatch();
+        return true;
+    } else {
+        return false;
+    }
 }
 
 QGraphicsScene *World::scene()
