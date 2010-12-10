@@ -10,7 +10,9 @@ class Interpreter : public QObject
 {
 Q_OBJECT
 public:
-    explicit Interpreter(QTcpSocket *socket, QObject *parent = 0);
+    explicit Interpreter(QTcpSocket *socket = NULL, QObject *parent = 0);
+
+    void setSocket(QTcpSocket *socket, bool deleteOldSoscket = true);
 
 signals:
     // can be caused by several reasons, like wrong protocol version,

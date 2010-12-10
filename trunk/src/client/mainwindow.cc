@@ -16,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setRenderHint(QPainter::Antialiasing);
     setCentralWidget(view);
+    connect(static_cast<MenuScene *>(menuScene), SIGNAL(connectionRequested(QHostAddress,quint16)),
+            this, SLOT(onConnectionRequested(QHostAddress,quint16)));
 }
 
 MainWindow::~MainWindow()

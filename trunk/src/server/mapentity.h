@@ -4,15 +4,19 @@
 #include <QObject>
 #include <QPoint>
 
+class World;
+
 class MapEntity : public QObject
 {
 Q_OBJECT
 public:
-    explicit MapEntity(QObject *parent = 0);
+    explicit MapEntity(World *parent = 0);
 
+    World *world();
     QPoint pos() const;
 
     virtual bool obstrutive() const;
+    quint8 getId() const;
 
 signals:
     void posChanged();
@@ -24,7 +28,9 @@ protected:
     virtual void explode();
 
 private:
+    World *m_world;
     QPoint m_pos;
+    quint8 id;
     // spritesSet
     // int currentSprite
 };

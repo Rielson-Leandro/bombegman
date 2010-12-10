@@ -1,13 +1,16 @@
 #include <QtCore/QCoreApplication>
 #include "world.h"
 
+#define DEFAULT_CENTRAL_SERVER_HOST "192.168.7.81"
+#define DEFAULT_CENTRAL_SERVER_PORT 50000
+#define DEFAULT_HOST QHostAddress::Any
+#define DEFAULT_PORT 50001
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    QSettings conf("server.ini",QSettings::IniFormat);
-    int port = conf.value("port", 59000).toInt();
-    World world;
-    world.listen(QHostAddress::Any, port);
+    World world(DEFAULT_HOST, DEFAULT_PORT);
+    world.start(QHostAddress(DEFAULT_CENTRAL_SERVER_HOST), DEFAULT_CENTRAL_SERVER_PORT);
 
     return a.exec();
 }

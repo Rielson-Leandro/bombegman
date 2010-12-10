@@ -2,6 +2,9 @@
 #define PLAYER_H
 
 #include <QObject>
+#include "bomber.h"
+
+class World;
 
 class QTcpSocket;
 
@@ -9,14 +12,20 @@ class Player : public QObject
 {
 Q_OBJECT
 public:
-    explicit Player(QObject *parent = 0);
+    explicit Player(QTcpSocket *socket, Bomber *bomber, World *parent);
+    ~Player();
 
 signals:
+    void matchRequest();
+    void streamError();
 
-public slots:
+private slots:
+    void onReadyRead();
 
 private:
+    Bomber *bomber;
     QTcpSocket *socket;
+    QByteArray buffer;
 };
 
 #endif // PLAYER_H

@@ -7,31 +7,47 @@
 #include <QObject>
 #include <QSettings>
 
+#include "map.h"
 #include "player.h"
 #include "mapentity.h"
-
+#include "bomber.h"
 
 
 class World : public QObject
 {
 Q_OBJECT
 public:
-    explicit World(QObject *parent = 0);
+    explicit World(const QHostAddress &hostAddress, quint16 port, QObject *parent = 0);
+    ~World();
 
     void requestMovement(MapEntity *, const QPoint &);
     void requestExplosion(const QPoint &);
 
-    void addPlayer(QTcpSocket *);
-
     // time is in miliseconds
     void startMatch(int matchTimeLimit);
 
-    void listen(QHostAddress hostAddress, quint16 port);
+    void start(const QHostAddress &subscriptionServerHostAddress = QHostAddress(), quint16 subscriptionServerPort = 0);
+
+    void removeEntity(MapEntity *entity);
+
+private slots:
+    void onNewConnection();
+
+    void onSubscriptionServerConnected();
 
 private:
+    void subscribeToServer(const QHostAddress &host, quint16 port);
+
+private:
+    QHostAddress subscriptionServerHostAddress;
+    quint16 subscriptionServerPort;
+
+    QHostAddress host;
+    quint16 port;
     QTcpServer *server;
 
-
+    QList<Player*> players;
+    Map *map;
 };
 
 #endif // WORLD_H

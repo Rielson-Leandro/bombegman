@@ -1,6 +1,6 @@
 #include "bomber.h"
 
-Bomber::Bomber(QObject *parent) :
-    QObject(parent)
+Bomber::Bomber(World *parent) :
+    MapEntity(parent)
 {
 }
