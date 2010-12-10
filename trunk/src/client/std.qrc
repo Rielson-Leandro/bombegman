@@ -19,5 +19,9 @@
         <file>gfx/bomberw0.png</file>
         <file>gfx/bomberw1.png</file>
         <file>gfx/bomberw2.png</file>
+        <file>gfx/brick.png</file>
+        <file>gfx/empty.png</file>
+        <file>gfx/wall.png</file>
+        <file>gfx/background.png</file>
     </qresource>
 </RCC>

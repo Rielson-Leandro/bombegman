@@ -12,7 +12,7 @@ class Player : public QObject
 {
 Q_OBJECT
 public:
-    explicit Player(QTcpSocket *socket, Bomber *bomber, World *parent);
+    explicit Player(QTcpSocket *socket, Bomber *bomber, QObject *parent = NULL);
     ~Player();
 
 signals:
@@ -23,9 +23,10 @@ private slots:
     void onReadyRead();
 
 private:
-    Bomber *bomber;
     QTcpSocket *socket;
     QByteArray buffer;
+    Bomber *bomber;
+    World *world;
 };
 
 #endif // PLAYER_H

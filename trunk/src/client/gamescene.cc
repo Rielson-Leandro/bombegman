@@ -2,7 +2,7 @@
 #include "inputhandler.h"
 
 GameScene::GameScene(InputHandler *inputHandler, QObject *parent) :
-    QGraphicsScene(parent),
+    QGraphicsScene(0, 0, 800, 600, parent),
     inputHandler(inputHandler)
 {
 }
