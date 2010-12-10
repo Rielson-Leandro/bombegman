@@ -1,13 +1,20 @@
 #include "player.h"
 #include "world.h"
+#include "protocol.h"
 
-Player::Player(QTcpSocket* socket, Bomber *bomber, World *parent) :
-    QObject(parent)
+Player::Player(QTcpSocket *socket, Bomber *bomber, QObject *parent) :
+    QObject(parent),
+    socket(socket),
+    bomber(bomber),
+    world(bomber->world())
 {
-    this->socket = socket;
-    this->bomber = bomber;
+    qDebug("Jesus Cristo ... estou aqui");
     quint8 id = bomber->getId();
     socket->write(reinterpret_cast <const char *> (&id), 1);
+
+    if (socket->size())
+        onReadyRead();
+    connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 }
 
 Player::~Player()
@@ -16,11 +23,13 @@ Player::~Player()
 
 void Player::onReadyRead()
 {
+    qDebug("lendo bytes");
     buffer.append(socket->readAll());
     if (buffer.size() > 1) {
         switch (buffer[0]) {
-        case 'R':
-            if (buffer[1] == 'G') {
+        case REQUEST:
+            if (buffer[1] == MATCH) {
+                qDebug("pronto para jogar");
                 emit matchRequest();
             } else {
                 emit streamError();

@@ -13,6 +13,8 @@ ConnectDialog::ConnectDialog(const QHostAddress &add, quint16 port,
         host(add),
         port(port)
 {
+    connect(list, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(onConnectButtonClicked()));
+
     QPushButton *connectButton = new QPushButton(QObject::tr("Connect"));
     connect(connectButton, SIGNAL(clicked()), this, SLOT(onConnectButtonClicked()));
 

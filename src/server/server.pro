@@ -18,6 +18,7 @@ HEADERS += world.h \
     player.h \
     bomb.h \
     bomber.h \
-    rand.h
+    rand.h \
+    protocol.h
 
 OTHER_FILES +=
