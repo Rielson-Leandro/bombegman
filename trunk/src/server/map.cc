@@ -97,3 +97,11 @@ void Map::removeEntity(MapEntity *entity)
 //    for (int i = )
 //    return QPoint(-1, -1);
 //}
+
+bool Map::setPos(MapEntity *entity, QPoint p){
+    //TODO check if it can be moved to the required position.
+    tiles[entity->pos().x()][entity->pos().y()].entities.removeOne(entity);
+    tiles[p.x()][p.y()].entities.append(entity);
+    entity->setPos(p);
+    return true;
+}

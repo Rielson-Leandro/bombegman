@@ -25,6 +25,8 @@ public:
     bool addMapEntity(MapEntity *entity, QPoint p);
     void removeEntity(MapEntity *entity);
 
+    bool setPos(MapEntity *entity, QPoint p);
+
 //    QPoint find(Tile::Space space, QPoint hint);
 signals:
 

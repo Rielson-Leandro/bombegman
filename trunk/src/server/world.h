@@ -30,6 +30,11 @@ public:
 
     void removeEntity(MapEntity *entity);
 
+    bool requestMovement(MapEntity *entity, char dir);
+
+signals:
+    void entityMoved(MapEntity *entity, char dir);
+
 private slots:
     void onNewConnection();
 

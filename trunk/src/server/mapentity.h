@@ -18,9 +18,6 @@ public:
     virtual bool obstrutive() const;
     quint8 getId() const;
 
-signals:
-    void posChanged();
-
 public slots:
     void setPos(const QPoint &p);
 
