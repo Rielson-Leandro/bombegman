@@ -1,5 +1,5 @@
 #include "world.h"
-
+#include "protocol.h"
 
 World::World(const QHostAddress &hostAddress, quint16 port, QObject *parent) :
         QObject(parent),
@@ -54,4 +54,28 @@ void World::onNewConnection()
 void World::removeEntity(MapEntity *entity)
 {
     map->removeEntity(entity);
+}
+
+bool World::requestMovement(MapEntity *entity, char dir)
+{
+    QPoint pos = entity->pos();
+    switch (dir)
+    {
+    case NORTH:
+        pos.ry()--;
+        break;
+    case SOUTH:
+        pos.ry()++;
+        break;
+    case EAST:
+        pos.rx()++;
+        break;
+    case WEST:
+        pos.rx()--;
+        break;
+    }
+    if (map->setPos(entity, pos)){
+        qDebug("Position changed.");
+        emit entityMoved(entity, dir);
+    }
 }

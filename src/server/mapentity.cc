@@ -12,10 +12,7 @@ MapEntity::MapEntity(World *parent) :
 
 void MapEntity::setPos(const QPoint &p)
 {
-    if (m_pos != p) {
-        m_pos = p;
-        emit posChanged();
-    }
+    m_pos = p;
 }
 
 void MapEntity::explode()
