@@ -8,7 +8,7 @@ Player::Player(QTcpSocket *socket, Bomber *bomber, QObject *parent) :
     bomber(bomber),
     world(bomber->world())
 {
-    qDebug("Jesus Cristo ... estou aqui");
+    qDebug("A client has connected...");
     quint8 id = bomber->getId();
     socket->write(reinterpret_cast <const char *> (&id), 1);
 
@@ -23,18 +23,31 @@ Player::~Player()
 
 void Player::onReadyRead()
 {
-    qDebug("lendo bytes");
+    qDebug("Reading bytes");
     buffer.append(socket->readAll());
-    if (buffer.size() > 1) {
-        switch (buffer[0]) {
+    while (buffer.size())
+    {
+        switch (buffer[0])
+        {
         case REQUEST:
-            if (buffer[1] == MATCH) {
-                qDebug("pronto para jogar");
-                emit matchRequest();
+            if (buffer.size() > 1)
+            {
+                if((int)(buffer[1]) == MATCH)
+                {
+                    qDebug("Ready to play");
+                    buffer.remove(0, 2);
+                    emit matchRequest();
+                } else {
+                    emit streamError();
+                }
             } else {
-                emit streamError();
+                return;
             }
             break;
+//        case MOVEMENT:
+
+
+
         default:
             emit streamError();
         }

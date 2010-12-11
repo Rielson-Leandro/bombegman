@@ -2,7 +2,10 @@
 #include "rand.h"
 
 
-#define DENSITY 8
+#define DENSITY         8   //Bricks density in the map (randomly positioned)
+#define WINTERVAL       2   //Interval between pillars (wall blocks)
+#define INI_WINTERVAL   3   //Where the pillar zone begins
+#define FINAL_WINTERVAL  11  //Where the pillar zone ends
 
 
 Map::Map(QObject *parent) :
@@ -10,6 +13,10 @@ Map::Map(QObject *parent) :
 {
 }
 
+/* The following method will generate the map according to the parameters set
+in the configuration file. Basically it will set the borders, bases, pillars
+and randomly fill the entery maps with bricks or empty spaces. The amount of
+bricks will depend on the DENSITY parameter. */
 
 void Map::generateMap()
 {
@@ -28,12 +35,22 @@ void Map::generateMap()
                 tiles[i][j].space = Tile::EMPTY;
             }
             //Sorteando os tijolos:
-
             if(tiles[i][j].space != Tile::WALL && aleat(1,10) <= DENSITY){
                 tiles[i][j].space = Tile::BRICK;
             }
 
         }
+    }
+
+    //Inseririndo pilastras:
+
+    for(int i = INI_WINTERVAL; i <= FINAL_WINTERVAL; i += WINTERVAL)
+    {
+        for(int j = INI_WINTERVAL; j <= FINAL_WINTERVAL; j += WINTERVAL)
+        {
+            tiles[i][j].space = Tile::WALL;
+        }
+
     }
 
     //Bases onde os bombers nascem (L):
@@ -57,7 +74,6 @@ void Map::generateMap()
     tiles[14][12].space = Tile::EMPTY;
     tiles[14][13].space = Tile::EMPTY;
 
-    // TODO: inserir pilastras
 }
 
 bool Map::addMapEntity(MapEntity *entity, QPoint p)

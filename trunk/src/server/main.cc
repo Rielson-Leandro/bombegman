@@ -1,10 +1,10 @@
 #include <QtCore/QCoreApplication>
 #include "world.h"
 
-#define DEFAULT_CENTRAL_SERVER_HOST "192.168.7.81"
+#define DEFAULT_CENTRAL_SERVER_HOST "192.168.0.114"
 #define DEFAULT_CENTRAL_SERVER_PORT 50000
 #define DEFAULT_HOST QHostAddress::Any
-#define DEFAULT_PORT 50001
+#define DEFAULT_PORT 8799
 
 int main(int argc, char *argv[])
 {
