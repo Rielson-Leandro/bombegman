@@ -44,19 +44,6 @@ void World::onNewConnection()
     {
         QTcpSocket *socket = server->nextPendingConnection();
         Bomber *bomber = new Bomber(this);
-//        switch (players.size()) {
-//        case 0:
-//            map->addMapEntity(bomber, QPoint(1, 1));
-//            break;
-//        case 1:
-//            map->addMapEntity(bomber, QPoint(14, 1));
-//            break;
-//        case 2:
-//            map->addMapEntity(bomber, QPoint(1, 14));
-//            break;
-//        case 3:
-//            map->addMapEntity(bomber, QPoint(14, 14));
-//        }
         players.append(new Player(socket, bomber, this));
         subscribeToServer(subscriptionServerHostAddress, subscriptionServerPort);
     }else{
