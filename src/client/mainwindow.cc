@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     view(new QGraphicsView(menuScene)),
     world(new World)
 {
-    view->viewport()->setFixedSize(800, 600);
+    view->setFixedSize(800, 600);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setRenderHint(QPainter::Antialiasing);
