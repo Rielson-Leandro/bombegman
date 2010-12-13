@@ -28,10 +28,6 @@ public:
     bool setPos(MapEntity *entity, QPoint p);
 
 //    QPoint find(Tile::Space space, QPoint hint);
-signals:
-
-public slots:
-
 private:
     Tile tiles[16][16];
 };

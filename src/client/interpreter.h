@@ -19,7 +19,8 @@ signals:
     // hackers trying atack, ...
     void streamError();
 
-    void idSent(quint8);
+    void idReceived(quint8);
+    void mapReceived(QPoint, char map[16][]);
 
     void movementRequest(MapEntity entity, QPoint newPos);
     void newEntityRequest(MapEntity entity, QPoint pos);
@@ -31,7 +32,10 @@ private slots:
 private:
     QTcpSocket *socket;
     QByteArray buffer;
-    bool idRead;
+
+    int state;
+    QPoint mapDimensions;
+    char mapBuffer[16][16];
 };
 
 #endif // INTERPRETER_H

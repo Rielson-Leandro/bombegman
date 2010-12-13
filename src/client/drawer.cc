@@ -22,6 +22,11 @@ Drawer::~Drawer()
     delete buttonItem;
 }
 
+void Drawer::prepareMap(QPoint, char map[16][])
+{
+    // TODO
+}
+
 void Drawer::requestMovement(MapEntity entity, QPoint newPos)
 {
     // TODO
