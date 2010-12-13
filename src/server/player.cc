@@ -47,10 +47,25 @@ void Player::onReadyRead()
         case MOVEMENT:
             if (buffer.size() > 1)
             {
-                //TODO: Use switch instead of "if" and finish other positions.
-                if((int)(buffer[1]) == NORTH){
+
+                switch ((int)(buffer[1]))
+                {
+                case NORTH:
                     qDebug("Player %i moving north", (int)(bomber->getId()));
                     bomber->world()->requestMovement(bomber, NORTH);
+                    break;
+                case SOUTH:
+                    qDebug("Player %i moving south", (int)(bomber->getId()));
+                    bomber->world()->requestMovement(bomber, SOUTH);
+                    break;
+                case EAST:
+                    qDebug("Player %i moving east", (int)(bomber->getId()));
+                    bomber->world()->requestMovement(bomber, EAST);
+                    break;
+                case WEST:
+                    qDebug("Player %i moving west", (int)(bomber->getId()));
+                    bomber->world()->requestMovement(bomber, EAST);
+                    break;
                 }
             }
 
