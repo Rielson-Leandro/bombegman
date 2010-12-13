@@ -20,7 +20,10 @@ World::World(QObject *parent) :
     connect(interpreter, SIGNAL(newEntityRequest(MapEntity,QPoint)), drawer, SLOT(requestNewEntity(MapEntity,QPoint)));
     connect(interpreter, SIGNAL(movementRequest(MapEntity,QPoint)), drawer, SLOT(requestMovement(MapEntity,QPoint)));
     connect(interpreter, SIGNAL(havocRequest(MapEntity)), drawer, SLOT(requestHavoc(MapEntity)));
-    connect(drawer, SIGNAL(removeButtonClicked()), this, SLOT(onReadyToPlay()));
+    connect(drawer, SIGNAL(removeButtonClicked()), formatter, SLOT(requestMatch()));
+    connect(drawer, SIGNAL(removeButtonClicked()), drawer, SLOT(removeReadyButton()));
+    connect(interpreter, SIGNAL(mapReceived(QPoint,char[][])), drawer, SLOT(addReadyButton()));
+    connect(interpreter, SIGNAL(mapReceived(QPoint,char[][])), drawer, SLOT(prepareMap(QPoint,char[][])));
 }
 
 World::~World()
@@ -31,18 +34,7 @@ World::~World()
 bool World::connectToHost(const QHostAddress &address, quint16 port)
 {
     socket->connectToHost(address, port);
-    if (socket->waitForConnected()) {
-        drawer->addReadyButton();
-        return true;
-    } else {
-        return false;
-    }
-}
-
-void World::onReadyToPlay()
-{
-    formatter->requestMatch();
-    drawer->removeReadyButton();
+    return socket->waitForConnected();
 }
 
 QGraphicsScene *World::scene()

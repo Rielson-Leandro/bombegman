@@ -39,6 +39,8 @@ void Player::onReadyRead()
                     emit matchRequest();
                 } else {
                     emit streamError();
+                    buffer.clear();
+                    return;
                 }
             } else {
                 return;
@@ -47,30 +49,13 @@ void Player::onReadyRead()
         case MOVEMENT:
             if (buffer.size() > 1)
             {
+                if (bomber->world()->requestMovement(bomber, buffer[1]))
+                    qDebug("Player %i moving %c", (int)(bomber->getId()), (char)(buffer[1]));
 
-                switch ((int)(buffer[1]))
-                {
-                case NORTH:
-                    qDebug("Player %i moving north", (int)(bomber->getId()));
-                    bomber->world()->requestMovement(bomber, NORTH);
-                    break;
-                case SOUTH:
-                    qDebug("Player %i moving south", (int)(bomber->getId()));
-                    bomber->world()->requestMovement(bomber, SOUTH);
-                    break;
-                case EAST:
-                    qDebug("Player %i moving east", (int)(bomber->getId()));
-                    bomber->world()->requestMovement(bomber, EAST);
-                    break;
-                case WEST:
-                    qDebug("Player %i moving west", (int)(bomber->getId()));
-                    bomber->world()->requestMovement(bomber, EAST);
-                    break;
-                }
+                buffer.remove(0, 2);
+            } else {
+                return;
             }
-
-
-
         default:
             emit streamError();
         }

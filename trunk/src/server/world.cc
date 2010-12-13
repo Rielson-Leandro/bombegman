@@ -5,7 +5,8 @@ World::World(const QHostAddress &hostAddress, quint16 port, QObject *parent) :
         QObject(parent),
         host(hostAddress),
         port(port),
-        server(new QTcpServer)
+        server(new QTcpServer),
+        map(new Map)
 {
     connect(server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
 }
@@ -44,7 +45,21 @@ void World::onNewConnection()
     {
         QTcpSocket *socket = server->nextPendingConnection();
         Bomber *bomber = new Bomber(this);
+        switch (players.size()) {
+        case 0:
+            map->addMapEntity(bomber, QPoint(1, 1));
+            break;
+        case 1:
+            map->addMapEntity(bomber, QPoint(14, 14));
+            break;
+        case 2:
+            map->addMapEntity(bomber, QPoint(14, 1));
+            break;
+        case 3:
+            map->addMapEntity(bomber, QPoint(1, 14));
+        }
         players.append(new Player(socket, bomber, this));
+
         subscribeToServer(subscriptionServerHostAddress, subscriptionServerPort);
     }else{
         delete server->nextPendingConnection();
@@ -73,9 +88,14 @@ bool World::requestMovement(MapEntity *entity, char dir)
     case WEST:
         pos.rx()--;
         break;
+    default:
+        return false;
     }
     if (map->setPos(entity, pos)){
         qDebug("Position changed.");
         emit entityMoved(entity, dir);
+        return true;
+    } else {
+        return false;
     }
 }

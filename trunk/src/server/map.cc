@@ -1,6 +1,6 @@
 #include "map.h"
 #include "rand.h"
-
+#include <QDebug>
 
 #define DENSITY         8   //Bricks density in the map (randomly positioned)
 #define WINTERVAL       2   //Interval between pillars (wall blocks)
@@ -73,12 +73,12 @@ void Map::generateMap()
     tiles[13][14].space = Tile::EMPTY;
     tiles[14][12].space = Tile::EMPTY;
     tiles[14][13].space = Tile::EMPTY;
-
 }
 
 bool Map::addMapEntity(MapEntity *entity, QPoint p)
 {
     tiles[p.x()][p.y()].entities.append(entity);
+    entity->setPos(p);
 }
 
 void Map::removeEntity(MapEntity *entity)
@@ -100,6 +100,13 @@ void Map::removeEntity(MapEntity *entity)
 
 bool Map::setPos(MapEntity *entity, QPoint p){
     //TODO check if it can be moved to the required position.
+    if (p.x() < 0 || p.y() < 0 || p.x() > 15 || p.y() > 15)
+        return false;
+
+    if (entity->pos() == p)
+        return false;
+
+    qDebug() << entity->pos();
     tiles[entity->pos().x()][entity->pos().y()].entities.removeOne(entity);
     tiles[p.x()][p.y()].entities.append(entity);
     entity->setPos(p);

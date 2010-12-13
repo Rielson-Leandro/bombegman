@@ -3,10 +3,18 @@
 #include "protocol.h"
 #include <QDebug>
 
+enum State
+{
+    WAITING_FOR_ID,
+    WAITING_FOR_MAP_DIMENSIONS,
+    WAITING_FOR_MAP_TILES,
+    WAITING_FOR_ACTION
+};
+
 Interpreter::Interpreter(QTcpSocket *socket, QObject *parent) :
     QObject(parent),
     socket(socket),
-    idRead(false)
+    state(WAITING_FOR_ID),
 {
     if (socket)
         connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
@@ -26,10 +34,35 @@ void Interpreter::setSocket(QTcpSocket *socket, bool deleteOldSoscket)
 
 void Interpreter::onReadyRead()
 {
-    qDebug("WTF");
     buffer.append(socket->readAll());
     while (buffer.size()) {
-        if (idRead) {
+        switch (state) {
+        case WAITING_FOR_ID:
+            quint8 id = buffer[0];
+            buffer.remove(0, 1);
+            idRead = true;
+            emit idReceived(id);
+            ++state;
+            break;
+        case WAITING_FOR_MAP_DIMENSIONS:
+            mapDimensions = MapEntity::getPos(buffer[0]);
+            buffer.remove(0, 1);
+            ++state;
+            break;
+        case WAITING_FOR_MAP_TILES:
+            if (buffer.size() >= mapDimensions.x() * mapDimensions.y()) {
+                int k = 0;
+                for (int j = 0;j < mapDimensions.y();++j) {
+                    for (int i = 0;i < mapDimensions.x();++i) {
+                        mapBuffer[i][j] = buffer[k++];
+                    }
+                }
+                buffer.remove(0, mapDimensions.x() * mapDimensions);
+                emit mapReceived(mapDimensions, mapBuffer);
+                ++state;
+            }
+            break;
+        case WAITING_FOR_ACTION:
             switch (buffer[0]) {
             case MOVEMENT:
                 if (buffer.size() > 3) {
@@ -62,11 +95,6 @@ void Interpreter::onReadyRead()
                 buffer.clear();
                 return;
             }
-        } else {
-            quint8 id = buffer[0];
-            buffer.remove(0, 1);
-            idRead = true;
-            emit idSent(id);
         }
     }
 }
