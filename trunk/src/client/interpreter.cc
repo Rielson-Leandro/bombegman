@@ -34,18 +34,17 @@ void Interpreter::setSocket(QTcpSocket *socket, bool deleteOldSoscket)
 
 void Interpreter::onReadyRead()
 {
-    bool idRead;
     buffer.append(socket->readAll());
     while (buffer.size()) {
         switch (state) {
         case WAITING_FOR_ID:
-            quint8 id;
-            id = buffer[0];
-            buffer.remove(0, 1);
-            idRead = true;
-            emit idReceived(id);
-            ++state;
-            break;
+            {
+                quint8 id = buffer[0];
+                buffer.remove(0, 1);
+                emit idReceived(id);
+                ++state;
+                break;
+            }
         case WAITING_FOR_MAP_DIMENSIONS:
             mapDimensions = MapEntity::getPos(buffer[0]);
             buffer.remove(0, 1);
@@ -59,7 +58,7 @@ void Interpreter::onReadyRead()
                         mapBuffer[i][j] = buffer[k++];
                     }
                 }
-                buffer.remove(0, mapDimensions.x()*mapDimensions.y());
+                buffer.remove(0, mapDimensions.x() * mapDimensions.y());
                 emit mapReceived(mapDimensions, mapBuffer);
                 ++state;
             }

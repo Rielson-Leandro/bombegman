@@ -21,6 +21,7 @@ void World::start(const QHostAddress &subscriptionServerHostAddress, quint16 sub
 {
     server->listen(host, port);
     subscribeToServer(subscriptionServerHostAddress, subscriptionServerPort);
+    map->generateMap();
 }
 
 void World::onSubscriptionServerConnected()
@@ -47,17 +48,16 @@ void World::onNewConnection()
         Bomber *bomber = new Bomber(this);
         switch (players.size()) {
         case 0:
-            map->generateMap();
             map->addMapEntity(bomber, QPoint(1, 1));
             break;
         case 1:
-            map->addMapEntity(bomber, QPoint(13, 13));
+            map->addMapEntity(bomber, QPoint(14, 14));
             break;
         case 2:
-            map->addMapEntity(bomber, QPoint(13, 1));
+            map->addMapEntity(bomber, QPoint(14, 1));
             break;
         case 3:
-            map->addMapEntity(bomber, QPoint(1, 13));
+            map->addMapEntity(bomber, QPoint(1, 14));
         }
         players.append(new Player(socket, bomber, this));
 
