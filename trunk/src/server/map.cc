@@ -3,9 +3,9 @@
 #include <QDebug>
 
 #define DENSITY         8   //Bricks density in the map (randomly positioned)
-#define WINTERVAL       2   //Interval between pillars (wall blocks)
-#define INI_WINTERVAL   3   //Where the pillar zone begins
-#define FINAL_WINTERVAL  11  //Where the pillar zone ends
+#define INTERVAL        2   //Space between columns (wall blocks)
+#define INI_INTERVAL    2   //Where the columns zone begins
+#define FINAL_INTERVAL  12  //Where the columns zone ends
 
 
 Map::Map(QObject *parent) :
@@ -21,12 +21,13 @@ bricks will depend on the DENSITY parameter. */
 void Map::generateMap()
 {
 
-    for(int i = 0; i < 16; i++)
+
+    for(int i = 0; i < 15; i++)
     {
-        for(int j = 0; j < 16; j++)
+        for(int j = 0; j < 15; j++)
         {
             //Bordas
-            if(i == 0 || i == 15 || j == 0 || j ==15)
+            if(i == 0 || i == 14 || j == 0 || j ==14)
             {
                 tiles[i][j].space = Tile::WALL;
             }
@@ -38,15 +39,13 @@ void Map::generateMap()
             if(tiles[i][j].space != Tile::WALL && aleat(1,10) <= DENSITY){
                 tiles[i][j].space = Tile::BRICK;
             }
-
         }
     }
 
     //Inseririndo pilastras:
-
-    for(int i = INI_WINTERVAL; i <= FINAL_WINTERVAL; i += WINTERVAL)
+    for(int i = INI_INTERVAL; i <= FINAL_INTERVAL; i += INTERVAL)
     {
-        for(int j = INI_WINTERVAL; j <= FINAL_WINTERVAL; j += WINTERVAL)
+        for(int j = INI_INTERVAL; j <= FINAL_INTERVAL; j += INTERVAL)
         {
             tiles[i][j].space = Tile::WALL;
         }
@@ -59,26 +58,36 @@ void Map::generateMap()
     tiles[2][1].space = Tile::EMPTY;
     tiles[3][1].space = Tile::EMPTY;
 
-    tiles[1][14].space = Tile::EMPTY;
-    tiles[1][13].space = Tile::EMPTY;
+    tiles[1][11].space = Tile::EMPTY;
     tiles[1][12].space = Tile::EMPTY;
-    tiles[2][14].space = Tile::EMPTY;
+    tiles[1][13].space = Tile::EMPTY;
+    tiles[2][13].space = Tile::EMPTY;
 
-    tiles[14][1].space = Tile::EMPTY;
-    tiles[13][1].space = Tile::EMPTY;
     tiles[12][1].space = Tile::EMPTY;
-    tiles[14][2].space = Tile::EMPTY;
+    tiles[13][1].space = Tile::EMPTY;
+    tiles[13][2].space = Tile::EMPTY;
+    tiles[13][3].space = Tile::EMPTY;
 
-    tiles[14][14].space = Tile::EMPTY;
-    tiles[13][14].space = Tile::EMPTY;
-    tiles[14][12].space = Tile::EMPTY;
-    tiles[14][13].space = Tile::EMPTY;
+    tiles[13][12].space = Tile::EMPTY;
+    tiles[13][13].space = Tile::EMPTY;
+    tiles[12][13].space = Tile::EMPTY;
+    tiles[11][13].space = Tile::EMPTY;
+
+    for(int i = 0; i < 15; i++)
+    {
+        for(int j = 0; j < 15; j++)
+        {
+          std::cout<<tiles[i][j].space;
+        }
+        std::cout<<std::endl;
+    }
 }
 
 bool Map::addMapEntity(MapEntity *entity, QPoint p)
 {
     tiles[p.x()][p.y()].entities.append(entity);
     entity->setPos(p);
+    return true;
 }
 
 void Map::removeEntity(MapEntity *entity)
@@ -100,15 +109,13 @@ void Map::removeEntity(MapEntity *entity)
 
 bool Map::setPos(MapEntity *entity, QPoint p){
     //TODO check if it can be moved to the required position.
-    if (p.x() < 0 || p.y() < 0 || p.x() > 15 || p.y() > 15)
-        return false;
 
     if (entity->pos() == p)
         return false;
 
-    qDebug() << entity->pos();
     tiles[entity->pos().x()][entity->pos().y()].entities.removeOne(entity);
     tiles[p.x()][p.y()].entities.append(entity);
     entity->setPos(p);
+    qDebug() << entity->pos();
     return true;
 }
