@@ -3,7 +3,6 @@
 
 #include "mapentity.h"
 #include <QObject>
-#include <iostream>
 
 class Map : public QObject
 {
