@@ -14,7 +14,7 @@ enum State
 Interpreter::Interpreter(QTcpSocket *socket, QObject *parent) :
     QObject(parent),
     socket(socket),
-    state(WAITING_FOR_ID),
+    state(WAITING_FOR_ID)
 {
     if (socket)
         connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
@@ -34,11 +34,13 @@ void Interpreter::setSocket(QTcpSocket *socket, bool deleteOldSoscket)
 
 void Interpreter::onReadyRead()
 {
+    bool idRead;
     buffer.append(socket->readAll());
     while (buffer.size()) {
         switch (state) {
         case WAITING_FOR_ID:
-            quint8 id = buffer[0];
+            quint8 id;
+            id = buffer[0];
             buffer.remove(0, 1);
             idRead = true;
             emit idReceived(id);
@@ -57,7 +59,7 @@ void Interpreter::onReadyRead()
                         mapBuffer[i][j] = buffer[k++];
                     }
                 }
-                buffer.remove(0, mapDimensions.x() * mapDimensions);
+                buffer.remove(0, mapDimensions.x()*mapDimensions.y());
                 emit mapReceived(mapDimensions, mapBuffer);
                 ++state;
             }

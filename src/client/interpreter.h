@@ -20,7 +20,7 @@ signals:
     void streamError();
 
     void idReceived(quint8);
-    void mapReceived(QPoint, char map[16][]);
+    void mapReceived(QPoint, char map[16][16]);
 
     void movementRequest(MapEntity entity, QPoint newPos);
     void newEntityRequest(MapEntity entity, QPoint pos);

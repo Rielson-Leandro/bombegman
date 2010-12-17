@@ -47,16 +47,17 @@ void World::onNewConnection()
         Bomber *bomber = new Bomber(this);
         switch (players.size()) {
         case 0:
+            map->generateMap();
             map->addMapEntity(bomber, QPoint(1, 1));
             break;
         case 1:
-            map->addMapEntity(bomber, QPoint(14, 14));
+            map->addMapEntity(bomber, QPoint(13, 13));
             break;
         case 2:
-            map->addMapEntity(bomber, QPoint(14, 1));
+            map->addMapEntity(bomber, QPoint(13, 1));
             break;
         case 3:
-            map->addMapEntity(bomber, QPoint(1, 14));
+            map->addMapEntity(bomber, QPoint(1, 13));
         }
         players.append(new Player(socket, bomber, this));
 
