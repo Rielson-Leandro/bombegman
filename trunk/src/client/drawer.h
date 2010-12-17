@@ -21,7 +21,7 @@ signals:
     void removeButtonClicked();
 
 public slots:
-    void prepareMap(QPoint, char map[16][]);
+    void prepareMap(QPoint, char map[16][16]);
 
     void requestMovement(MapEntity entity, QPoint newPos);
     void requestNewEntity(MapEntity entity, QPoint pos);

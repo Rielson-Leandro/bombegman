@@ -22,7 +22,7 @@ Drawer::~Drawer()
     delete buttonItem;
 }
 
-void Drawer::prepareMap(QPoint, char map[16][])
+void Drawer::prepareMap(QPoint, char map[16][16])
 {
     // TODO
 }
