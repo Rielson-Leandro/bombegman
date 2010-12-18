@@ -1,17 +1,22 @@
 #include <QtCore/QCoreApplication>
+#include <QString>
 #include "world.h"
 #include "map.h"
+#include "settings.h"
 
-#define DEFAULT_CENTRAL_SERVER_HOST "127.0.0.1"
-#define DEFAULT_CENTRAL_SERVER_PORT 50000
-#define DEFAULT_HOST QHostAddress::Any
-#define DEFAULT_PORT 8799
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    World world(DEFAULT_HOST, DEFAULT_PORT);
-    world.start(QHostAddress(DEFAULT_CENTRAL_SERVER_HOST), DEFAULT_CENTRAL_SERVER_PORT);
+    Settings *settings = Settings::getInstance();
+    QString central_server_host = settings->central_server_host;
+    int central_server_port = settings->central_server_port;
+    QString host = settings->host;
+    int port = settings->port;
+
+
+    World world(QHostAddress(host), port);
+    world.start(QHostAddress(central_server_host), central_server_port);
 //Testing map generation algorithms:
 //    Map map;
 //    map.generateMap();

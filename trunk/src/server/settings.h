@@ -11,6 +11,8 @@ private:
     Settings();
     static Settings *instance;
 
+public:
+    static Settings *getInstance();
     QString central_server_host;
     int central_server_port;
     QString host;
@@ -21,9 +23,6 @@ private:
     int ini_winterval;
     int final_winterval;
 
-
-public:
-    static Settings *getInstance();
 signals:
 
 public slots:
