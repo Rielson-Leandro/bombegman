@@ -27,12 +27,12 @@ void Map::generateMap()
 {
 
 
-    for(int i = 0; i < 15; i++)
+    for(int i = 0; i < 16; i++)
     {
-        for(int j = 0; j < 15; j++)
+        for(int j = 0; j < 16; j++)
         {
             //Borders
-            if(i == 0 || i == 14 || j == 0 || j ==14)
+            if(i == 0 || i == 15 || j == 0 || j ==15)
             {
                 tiles[i][j].space = Tile::WALL;
             }
@@ -63,20 +63,20 @@ void Map::generateMap()
     tiles[2][1].space = Tile::EMPTY;
     tiles[3][1].space = Tile::EMPTY;
 
-    tiles[1][11].space = Tile::EMPTY;
     tiles[1][12].space = Tile::EMPTY;
     tiles[1][13].space = Tile::EMPTY;
-    tiles[2][13].space = Tile::EMPTY;
+    tiles[1][14].space = Tile::EMPTY;
+    tiles[2][14].space = Tile::EMPTY;
 
-    tiles[12][1].space = Tile::EMPTY;
     tiles[13][1].space = Tile::EMPTY;
-    tiles[13][2].space = Tile::EMPTY;
-    tiles[13][3].space = Tile::EMPTY;
+    tiles[14][1].space = Tile::EMPTY;
+    tiles[14][2].space = Tile::EMPTY;
+    tiles[14][3].space = Tile::EMPTY;
 
-    tiles[13][12].space = Tile::EMPTY;
-    tiles[13][13].space = Tile::EMPTY;
-    tiles[12][13].space = Tile::EMPTY;
-    tiles[11][13].space = Tile::EMPTY;
+    tiles[14][13].space = Tile::EMPTY;
+    tiles[14][14].space = Tile::EMPTY;
+    tiles[13][14].space = Tile::EMPTY;
+    tiles[12][14].space = Tile::EMPTY;
 
 //    for(int i = 0; i < 15; i++)
 //    {
