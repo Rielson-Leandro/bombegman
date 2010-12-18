@@ -58,6 +58,8 @@ void Interpreter::onReadyRead()
                 buffer.remove(0, 1);
                 ++state;
                 break;
+            } else {
+                return;
             }
         case WAITING_FOR_MAP_TILES:
             if (buffer.size() >= mapDimensions.x() * mapDimensions.y()) {
@@ -70,6 +72,8 @@ void Interpreter::onReadyRead()
                 buffer.remove(0, mapDimensions.x() * mapDimensions.y());
                 emit mapReceived();
                 ++state;
+            } else {
+                return;
             }
             break;
         case WAITING_FOR_ACTION:
