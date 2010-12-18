@@ -15,7 +15,7 @@ public:
     World *world();
     QPoint pos() const;
 
-    virtual bool obstrutive() const;
+    virtual bool obstructive() const;
     quint8 getId() const;
 
 public slots:
