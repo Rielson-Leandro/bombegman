@@ -13,15 +13,19 @@ private:
 
 public:
     static Settings *getInstance();
-    QString central_server_host;
-    int central_server_port;
-    QString host;
-    int port;
 
-    int density;
-    int winterval;
-    int ini_winterval;
-    int final_winterval;
+    const QString central_server_host;
+    const int central_server_port;
+    const QString host;
+    const int port;
+
+    const int width;
+    const int height;
+    const int density;
+    const int winterval;
+    const int ini_winterval;
+    const int finalx_winterval;
+    const int finaly_winterval;
 };
 
 #endif // SETTINGS_H

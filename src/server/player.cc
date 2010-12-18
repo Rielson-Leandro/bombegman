@@ -5,7 +5,7 @@
 
 inline QPoint getPos(unsigned char byte)
 {
-    const int x = byte & 0xF0 >> 4;
+    const int x = (byte & 0xF0) >> 4;
     const int y = byte & 0x0F;
     return QPoint(x, y);
 }
@@ -28,11 +28,13 @@ Player::Player(QTcpSocket *socket, Bomber *bomber, QObject *parent) :
     quint8 id = bomber->getId();
     socket->write(reinterpret_cast <const char *> (&id), 1);
 
-    socket->write(QByteArray(1, getByte(QPoint(15, 15))));
-
     const Map &map = bomber->world()->getMap();
-    for (int j = 0;j < 16;++j) {
-        for (int i = 0;i < 16;++i) {
+    QPoint dimensions = map.getDimensions();
+
+    socket->write(QByteArray(1, getByte(dimensions - QPoint(1, 1))));
+
+    for (int j = 0; j < dimensions.y(); ++j) {
+        for (int i = 0; i < dimensions.x(); ++i) {
             socket->write(QByteArray(1, map.getTile(i, j).space));
         }
     }
