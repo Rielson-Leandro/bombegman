@@ -1,11 +1,12 @@
 #include "map.h"
 #include "rand.h"
 #include <QDebug>
+#include <iostream>
 
 #define DENSITY         8   //Bricks density in the map (randomly positioned)
-#define WINTERVAL        2   //Space between  (wall blocks)
-#define INI_WINTERVAL    2   //Where the columns zone begins
-#define FINAL_WINTERVAL  12  //Where the columns zone ends
+#define WINTERVAL        2   //Space between pillars (wall blocks)
+#define INI_WINTERVAL    2   //Where the pillars zone begins
+#define FINAL_WINTERVAL  12  //Where the pillars zone ends
 
 
 Map::Map(QObject *parent) :
@@ -26,7 +27,7 @@ void Map::generateMap()
     {
         for(int j = 0; j < 15; j++)
         {
-            //Bordas
+            //Borders
             if(i == 0 || i == 14 || j == 0 || j ==14)
             {
                 tiles[i][j].space = Tile::WALL;
@@ -35,14 +36,14 @@ void Map::generateMap()
             {
                 tiles[i][j].space = Tile::EMPTY;
             }
-            //Sorteando os tijolos:
+            //Randomly placing bricks:
             if(tiles[i][j].space != Tile::WALL && aleat(1,10) <= DENSITY){
                 tiles[i][j].space = Tile::BRICK;
             }
         }
     }
 
-    //Inseririndo pilastras:
+    //Inserting pillars:
     for(int i = INI_WINTERVAL; i <= FINAL_WINTERVAL; i += WINTERVAL)
     {
         for(int j = INI_WINTERVAL; j <= FINAL_WINTERVAL; j += WINTERVAL)
@@ -52,7 +53,7 @@ void Map::generateMap()
 
     }
 
-    //Bases onde os bombers nascem (L):
+    //Drawing bombers spawn bases(L):
     tiles[1][1].space = Tile::EMPTY;
     tiles[1][2].space = Tile::EMPTY;
     tiles[2][1].space = Tile::EMPTY;
@@ -77,9 +78,9 @@ void Map::generateMap()
     {
         for(int j = 0; j < 15; j++)
         {
-            qDebug() << tiles[i][j].space;
+            std::cout << tiles[i][j].space;
         }
-
+        std::cout << std::endl;
     }
 }
 
