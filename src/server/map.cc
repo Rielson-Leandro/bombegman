@@ -3,9 +3,9 @@
 #include <QDebug>
 
 #define DENSITY         8   //Bricks density in the map (randomly positioned)
-#define INTERVAL        2   //Space between columns (wall blocks)
-#define INI_INTERVAL    2   //Where the columns zone begins
-#define FINAL_INTERVAL  12  //Where the columns zone ends
+#define WINTERVAL        2   //Space between  (wall blocks)
+#define INI_WINTERVAL    2   //Where the columns zone begins
+#define FINAL_WINTERVAL  12  //Where the columns zone ends
 
 
 Map::Map(QObject *parent) :
@@ -43,9 +43,9 @@ void Map::generateMap()
     }
 
     //Inseririndo pilastras:
-    for(int i = INI_INTERVAL; i <= FINAL_INTERVAL; i += INTERVAL)
+    for(int i = INI_WINTERVAL; i <= FINAL_WINTERVAL; i += WINTERVAL)
     {
-        for(int j = INI_INTERVAL; j <= FINAL_INTERVAL; j += INTERVAL)
+        for(int j = INI_WINTERVAL; j <= FINAL_WINTERVAL; j += WINTERVAL)
         {
             tiles[i][j].space = Tile::WALL;
         }
@@ -77,9 +77,9 @@ void Map::generateMap()
     {
         for(int j = 0; j < 15; j++)
         {
-          std::cout<<tiles[i][j].space;
+            qDebug() << tiles[i][j].space;
         }
-        std::cout<<std::endl;
+
     }
 }
 
