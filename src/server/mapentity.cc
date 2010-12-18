@@ -19,7 +19,7 @@ void MapEntity::explode()
 {
 }
 
-bool MapEntity::obstrutive() const
+bool MapEntity::obstructive() const
 {
     return false;
 }
