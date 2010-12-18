@@ -109,10 +109,21 @@ void Map::removeEntity(MapEntity *entity)
 //}
 
 bool Map::setPos(MapEntity *entity, QPoint p){
-    //TODO check if it can be moved to the required position.
 
     if (entity->pos() == p)
         return false;
+
+    if (this->tiles[p.x()][p.y()].space != Tile::EMPTY)
+    {
+        return false;
+    }
+
+    foreach (MapEntity *e, this->tiles[p.x()][p.y()].entities){
+        if(e->obstructive())
+        {
+            return false;
+        }
+    }
 
     tiles[entity->pos().x()][entity->pos().y()].entities.removeOne(entity);
     tiles[p.x()][p.y()].entities.append(entity);
