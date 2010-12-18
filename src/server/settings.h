@@ -22,11 +22,6 @@ public:
     int winterval;
     int ini_winterval;
     int final_winterval;
-
-signals:
-
-public slots:
-
 };
 
 #endif // SETTINGS_H

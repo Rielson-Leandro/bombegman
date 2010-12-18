@@ -20,7 +20,7 @@ public:
     explicit World(const QHostAddress &hostAddress, quint16 port, QObject *parent = 0);
     ~World();
 
-    void requestMovement(MapEntity *, const QPoint &);
+    bool requestMovement(MapEntity *entity, char dir);
     void requestExplosion(const QPoint &);
 
     // time is in miliseconds
@@ -30,7 +30,7 @@ public:
 
     void removeEntity(MapEntity *entity);
 
-    bool requestMovement(MapEntity *entity, char dir);
+    const Map &getMap() const;
 
 signals:
     void entityMoved(MapEntity *entity, char dir);

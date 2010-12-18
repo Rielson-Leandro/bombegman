@@ -1,6 +1,22 @@
 #include "player.h"
 #include "world.h"
 #include "protocol.h"
+#include "mapentity.h"
+
+inline QPoint getPos(unsigned char byte)
+{
+    const int x = byte & 0xF0 >> 4;
+    const int y = byte & 0x0F;
+    return QPoint(x, y);
+}
+
+inline unsigned char getByte(QPoint point)
+{
+    const unsigned char x = point.x(), y = point.y();
+    unsigned char byte = x << 4;
+    byte |= y;
+    return byte;
+}
 
 Player::Player(QTcpSocket *socket, Bomber *bomber, QObject *parent) :
     QObject(parent),
@@ -12,8 +28,18 @@ Player::Player(QTcpSocket *socket, Bomber *bomber, QObject *parent) :
     quint8 id = bomber->getId();
     socket->write(reinterpret_cast <const char *> (&id), 1);
 
+    socket->write(QByteArray(1, getByte(QPoint(15, 15))));
+
+    const Map &map = bomber->world()->getMap();
+    for (int j = 0;j < 16;++j) {
+        for (int i = 0;i < 16;++i) {
+            socket->write(QByteArray(1, map.getTile(i, j).space));
+        }
+    }
+
     if (socket->size())
         onReadyRead();
+
     connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 }
 

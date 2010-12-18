@@ -2,7 +2,7 @@
 #include "connectdialog.h"
 #include <QGraphicsProxyWidget>
 
-#define DEFAULT_CENTRAL_SERVER_HOST "127.0.0.1"
+#define DEFAULT_CENTRAL_SERVER_HOST "192.168.7.81"
 #define DEFAULT_CENTRAL_SERVER_PORT 50000
 
 MenuScene::MenuScene(QObject *parent) :

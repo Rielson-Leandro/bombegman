@@ -23,6 +23,9 @@ public:
 
     QGraphicsScene *scene();
 
+private slots:
+    void onMapReceived();
+
 private:
     InputHandler *inputHandler;
     GameScene *gameScene;

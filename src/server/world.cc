@@ -19,16 +19,16 @@ World::~World()
 
 void World::start(const QHostAddress &subscriptionServerHostAddress, quint16 subscriptionServerPort)
 {
+    map->generateMap();
     server->listen(host, port);
     subscribeToServer(subscriptionServerHostAddress, subscriptionServerPort);
-    map->generateMap();
 }
 
 void World::onSubscriptionServerConnected()
 {
     QTcpSocket *s = static_cast<QTcpSocket *>(sender());
-    s->write(QByteArray("SUBSCRIBE ")
-             + "bombegman/0.2 " + QByteArray::number(port) + ' '
+    s->write(QByteArray("SUBSCRIBE bombegman/0.2 ")
+             + QByteArray::number(port) + ' '
              + QByteArray::number(players.size()) + ' ' + "4\n");
     connect(s, SIGNAL(disconnected()), s, SLOT(deleteLater()));
 }
@@ -99,4 +99,9 @@ bool World::requestMovement(MapEntity *entity, char dir)
     } else {
         return false;
     }
+}
+
+const Map &World::getMap() const
+{
+    return *map;
 }

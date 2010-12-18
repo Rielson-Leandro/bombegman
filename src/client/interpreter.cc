@@ -32,6 +32,11 @@ void Interpreter::setSocket(QTcpSocket *socket, bool deleteOldSoscket)
     this->socket = socket;
 }
 
+QPair<QPoint, char(*)[16]> Interpreter::getMap()
+{
+    return QPair<QPoint, char(*)[16]>(mapDimensions, mapBuffer);
+}
+
 void Interpreter::onReadyRead()
 {
     buffer.append(socket->readAll());
@@ -46,10 +51,14 @@ void Interpreter::onReadyRead()
                 break;
             }
         case WAITING_FOR_MAP_DIMENSIONS:
-            mapDimensions = MapEntity::getPos(buffer[0]);
-            buffer.remove(0, 1);
-            ++state;
-            break;
+            if (buffer.size()) {
+                mapDimensions = MapEntity::getPos(buffer[0]);
+                mapDimensions.rx()++;
+                mapDimensions.ry()++;
+                buffer.remove(0, 1);
+                ++state;
+                break;
+            }
         case WAITING_FOR_MAP_TILES:
             if (buffer.size() >= mapDimensions.x() * mapDimensions.y()) {
                 int k = 0;
@@ -59,7 +68,7 @@ void Interpreter::onReadyRead()
                     }
                 }
                 buffer.remove(0, mapDimensions.x() * mapDimensions.y());
-                emit mapReceived(mapDimensions, mapBuffer);
+                emit mapReceived();
                 ++state;
             }
             break;
