@@ -11,7 +11,8 @@ SOURCES += main.cc \
     player.cc \
     bomb.cc \
     bomber.cc \
-    rand.cc
+    rand.cc \
+    settings.cpp
 HEADERS += world.h \
     map.h \
     mapentity.h \
@@ -19,6 +20,8 @@ HEADERS += world.h \
     bomb.h \
     bomber.h \
     rand.h \
-    protocol.h
+    protocol.h \
+    settings.h
 
-OTHER_FILES +=
+OTHER_FILES += \
+    settings.ini
