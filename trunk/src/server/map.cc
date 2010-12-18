@@ -14,11 +14,15 @@ Map::Map(QObject *parent) :
     this->final_winterval = settings->final_winterval; //Where the pillars zone ends
 }
 
+const Map::Tile &Map::getTile(int x, int y) const
+{
+    return tiles[x][y];
+}
+
 /* The following method will generate the map according to the parameters set
 in the configuration file. Basically it will set the borders, bases, pillars
 and randomly fill the entery maps with bricks or empty spaces. The amount of
 bricks will depend on the density parameter. */
-
 void Map::generateMap()
 {
 

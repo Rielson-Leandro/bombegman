@@ -22,6 +22,8 @@ public:
 
     explicit Map(QObject *parent = 0);
 
+    const Tile &getTile(int x, int y) const;
+
     void generateMap(/* parameters */);
     bool addMapEntity(MapEntity *entity, QPoint p);
     void removeEntity(MapEntity *entity);

@@ -9,6 +9,7 @@ class QGraphicsScene;
 class QGraphicsItem;
 class QPushButton;
 class QGraphicsProxyWidget;
+class TileItem;
 
 class Drawer : public QObject
 {
@@ -21,7 +22,7 @@ signals:
     void removeButtonClicked();
 
 public slots:
-    void prepareMap(QPoint, char map[16][16]);
+    void prepareMap(const QPoint dimensions, char map[16][16]);
 
     void requestMovement(MapEntity entity, QPoint newPos);
     void requestNewEntity(MapEntity entity, QPoint pos);
@@ -34,6 +35,7 @@ private:
     QGraphicsScene *scene;
     QGraphicsItem *map[16][16];
     QHash<int, QGraphicsItem *> entities;
+    TileItem *tiles[16][16];
 
     bool sceneHasReadyButton;
     QPushButton *button;

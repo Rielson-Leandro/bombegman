@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "mapentity.h"
+#include <QPair>
 
 class QTcpSocket;
 
@@ -13,6 +14,7 @@ public:
     explicit Interpreter(QTcpSocket *socket = NULL, QObject *parent = 0);
 
     void setSocket(QTcpSocket *socket, bool deleteOldSoscket = true);
+    QPair<QPoint, char(*)[16]> getMap();
 
 signals:
     // can be caused by several reasons, like wrong protocol version,
@@ -20,7 +22,7 @@ signals:
     void streamError();
 
     void idReceived(quint8);
-    void mapReceived(QPoint, char map[16][16]);
+    void mapReceived();
 
     void movementRequest(MapEntity entity, QPoint newPos);
     void newEntityRequest(MapEntity entity, QPoint pos);
