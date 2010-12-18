@@ -1,17 +1,18 @@
 #include "map.h"
 #include "rand.h"
 #include <QDebug>
-#include <iostream>
-
 
 Map::Map(QObject *parent) :
     QObject(parent)
 {
-    this->settings = Settings::getInstance();
+    Settings *settings = Settings::getInstance();
     this->density = settings->density; //Bricks density in the map (randomly positioned)
     this->winterval = settings->winterval; //Space between pillars (wall blocks)
     this->ini_winterval = settings->ini_winterval; //Where the pillars zone begins
-    this->final_winterval = settings->final_winterval; //Where the pillars zone ends
+    this->finalx_winterval = settings->finalx_winterval; //Where the pillars zone ends
+    this->finaly_winterval = settings->finaly_winterval; //Where the pillars zone ends
+    this->m_width = settings->width;
+    this->m_height = settings->height;
 }
 
 const Map::Tile &Map::getTile(int x, int y) const
@@ -25,14 +26,12 @@ and randomly fill the entery maps with bricks or empty spaces. The amount of
 bricks will depend on the density parameter. */
 void Map::generateMap()
 {
-
-
-    for(int i = 0; i < 16; i++)
+    for(int i = 0; i < m_width; i++)
     {
-        for(int j = 0; j < 16; j++)
+        for(int j = 0; j < m_height; j++)
         {
             //Borders
-            if(i == 0 || i == 15 || j == 0 || j ==15)
+            if(i == 0 || i == m_width - 1 || j == 0 || j == m_height - 1)
             {
                 tiles[i][j].space = Tile::WALL;
             }
@@ -48,9 +47,9 @@ void Map::generateMap()
     }
 
     //Inserting pillars:
-    for(int i = ini_winterval; i <= final_winterval; i += winterval)
+    for(int i = ini_winterval; i <= finalx_winterval; i += winterval)
     {
-        for(int j = ini_winterval; j <= final_winterval; j += winterval)
+        for(int j = ini_winterval; j <= finaly_winterval; j += winterval)
         {
             tiles[i][j].space = Tile::WALL;
         }
@@ -61,31 +60,18 @@ void Map::generateMap()
     tiles[1][1].space = Tile::EMPTY;
     tiles[1][2].space = Tile::EMPTY;
     tiles[2][1].space = Tile::EMPTY;
-    tiles[3][1].space = Tile::EMPTY;
 
-    tiles[1][12].space = Tile::EMPTY;
-    tiles[1][13].space = Tile::EMPTY;
-    tiles[1][14].space = Tile::EMPTY;
-    tiles[2][14].space = Tile::EMPTY;
+    tiles[1][m_height - 3].space = Tile::EMPTY;
+    tiles[1][m_height - 2].space = Tile::EMPTY;
+    tiles[2][m_height - 2].space = Tile::EMPTY;
 
-    tiles[13][1].space = Tile::EMPTY;
-    tiles[14][1].space = Tile::EMPTY;
-    tiles[14][2].space = Tile::EMPTY;
-    tiles[14][3].space = Tile::EMPTY;
+    tiles[m_width - 3][1].space = Tile::EMPTY;
+    tiles[m_width - 2][1].space = Tile::EMPTY;
+    tiles[m_width - 2][2].space = Tile::EMPTY;
 
-    tiles[14][13].space = Tile::EMPTY;
-    tiles[14][14].space = Tile::EMPTY;
-    tiles[13][14].space = Tile::EMPTY;
-    tiles[12][14].space = Tile::EMPTY;
-
-//    for(int i = 0; i < 15; i++)
-//    {
-//        for(int j = 0; j < 15; j++)
-//        {
-//            std::cout << tiles[i][j].space;
-//        }
-//        std::cout << std::endl;
-//    }
+    tiles[m_width - 2][m_height - 3].space = Tile::EMPTY;
+    tiles[m_width - 2][m_height - 2].space = Tile::EMPTY;
+    tiles[m_width - 3][m_height - 2].space = Tile::EMPTY;
 }
 
 bool Map::addMapEntity(MapEntity *entity, QPoint p)
@@ -102,7 +88,7 @@ void Map::removeEntity(MapEntity *entity)
 
 //QPoint Map::find(Tile::Space space, QPoint hint)
 //{
-//    for (int i = hint.x();i < 16;++i) {
+//    for (int i = hint.x();i < width;++i) {
 //        for (int j = 0;j < hint.y();++j) {
 //            if (tiles[i][j].space == space)
 //                return QPoint(i, j);

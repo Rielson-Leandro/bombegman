@@ -18,7 +18,7 @@ struct MapEntity
 
     static QPoint getPos(unsigned char byte)
     {
-        const int x = byte & 0xF0 >> 4;
+        const int x = (byte & 0xF0) >> 4;
         const int y = byte & 0x0F;
         return QPoint(x, y);
     }

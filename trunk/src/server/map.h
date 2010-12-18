@@ -30,14 +30,24 @@ public:
 
     bool setPos(MapEntity *entity, QPoint p);
 
+    QPoint getDimensions() const;
+
 //    QPoint find(Tile::Space space, QPoint hint);
 private:
     Tile tiles[16][16];
-    Settings *settings;
+    int m_width;
+    int m_height;
+
     int density;
     int winterval;
     int ini_winterval;
-    int final_winterval;
+    int finalx_winterval;
+    int finaly_winterval;
 };
+
+inline QPoint Map::getDimensions() const
+{
+    return QPoint(m_width, m_height);
+}
 
 #endif // MAP_H
