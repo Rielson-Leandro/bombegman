@@ -2,6 +2,7 @@
 #define MAP_H
 
 #include "mapentity.h"
+#include "settings.h"
 #include <QObject>
 
 class Map : public QObject
@@ -30,6 +31,11 @@ public:
 //    QPoint find(Tile::Space space, QPoint hint);
 private:
     Tile tiles[16][16];
+    Settings *settings;
+    int density;
+    int winterval;
+    int ini_winterval;
+    int final_winterval;
 };
 
 #endif // MAP_H

@@ -3,21 +3,21 @@
 #include <QDebug>
 #include <iostream>
 
-#define DENSITY         8   //Bricks density in the map (randomly positioned)
-#define WINTERVAL        2   //Space between pillars (wall blocks)
-#define INI_WINTERVAL    2   //Where the pillars zone begins
-#define FINAL_WINTERVAL  12  //Where the pillars zone ends
-
 
 Map::Map(QObject *parent) :
     QObject(parent)
 {
+    this->settings = Settings::getInstance();
+    this->density = settings->density; //Bricks density in the map (randomly positioned)
+    this->winterval = settings->winterval; //Space between pillars (wall blocks)
+    this->ini_winterval = settings->ini_winterval; //Where the pillars zone begins
+    this->final_winterval = settings->final_winterval; //Where the pillars zone ends
 }
 
 /* The following method will generate the map according to the parameters set
 in the configuration file. Basically it will set the borders, bases, pillars
 and randomly fill the entery maps with bricks or empty spaces. The amount of
-bricks will depend on the DENSITY parameter. */
+bricks will depend on the density parameter. */
 
 void Map::generateMap()
 {
@@ -37,16 +37,16 @@ void Map::generateMap()
                 tiles[i][j].space = Tile::EMPTY;
             }
             //Randomly placing bricks:
-            if(tiles[i][j].space != Tile::WALL && aleat(1,10) <= DENSITY){
+            if(tiles[i][j].space != Tile::WALL && aleat(1,10) <= density){
                 tiles[i][j].space = Tile::BRICK;
             }
         }
     }
 
     //Inserting pillars:
-    for(int i = INI_WINTERVAL; i <= FINAL_WINTERVAL; i += WINTERVAL)
+    for(int i = ini_winterval; i <= final_winterval; i += winterval)
     {
-        for(int j = INI_WINTERVAL; j <= FINAL_WINTERVAL; j += WINTERVAL)
+        for(int j = ini_winterval; j <= final_winterval; j += winterval)
         {
             tiles[i][j].space = Tile::WALL;
         }
@@ -74,14 +74,14 @@ void Map::generateMap()
     tiles[12][13].space = Tile::EMPTY;
     tiles[11][13].space = Tile::EMPTY;
 
-    for(int i = 0; i < 15; i++)
-    {
-        for(int j = 0; j < 15; j++)
-        {
-            std::cout << tiles[i][j].space;
-        }
-        std::cout << std::endl;
-    }
+//    for(int i = 0; i < 15; i++)
+//    {
+//        for(int j = 0; j < 15; j++)
+//        {
+//            std::cout << tiles[i][j].space;
+//        }
+//        std::cout << std::endl;
+//    }
 }
 
 bool Map::addMapEntity(MapEntity *entity, QPoint p)

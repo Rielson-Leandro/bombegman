@@ -17,8 +17,6 @@ int main(int argc, char *argv[])
 
     World world(QHostAddress(host), port);
     world.start(QHostAddress(central_server_host), central_server_port);
-//Testing map generation algorithms:
-//    Map map;
-//    map.generateMap();
+
     return a.exec();
 }
