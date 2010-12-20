@@ -21,12 +21,9 @@ signals:
     void matchRequest();
     void streamError();
 
-public slots:
-    void sendNewEntity(char type, char id, QPoint pos);
-
 private slots:
     void onReadyRead();
-    void onEntityMoved(MapEntity*,char);
+    void onEntityMoved(MapEntity *entity, char dir);
     void onNewEntity(char type, char id, QPoint pos);
 
 private:
