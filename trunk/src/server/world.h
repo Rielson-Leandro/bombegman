@@ -6,6 +6,7 @@
 #include <QTcpServer>
 #include <QObject>
 #include <QSettings>
+#include <QPoint>
 
 #include "map.h"
 #include "player.h"
@@ -31,6 +32,8 @@ public:
     void removeEntity(MapEntity *entity);
 
     const Map &getMap() const;
+
+    void onDestructionRequested(QPoint pos, int range);
 
 signals:
     void entityMoved(MapEntity *entity, char dir);

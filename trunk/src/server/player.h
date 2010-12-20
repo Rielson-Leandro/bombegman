@@ -14,7 +14,7 @@ Q_OBJECT
 public:
     explicit Player(QTcpSocket *socket, Bomber *bomber, QObject *parent = NULL);
     ~Player();
-
+    void decreaseActiveBombs();
 signals:
     void matchRequest();
     void streamError();
@@ -27,6 +27,7 @@ private:
     QByteArray buffer;
     Bomber *bomber;
     World *world;
+    int activeBombs;
 };
 
 #endif // PLAYER_H

@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-    if (settings->density > 10 | settings < 0)
+    if (settings->density > 10 | settings->density < 1)
     {
         qDebug("ERROR: density parameter should be between 0 and 10.");
         return 0;
