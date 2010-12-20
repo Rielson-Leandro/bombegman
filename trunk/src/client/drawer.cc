@@ -2,7 +2,9 @@
 #include <QGraphicsScene>
 #include <QPushButton>
 #include <QGraphicsProxyWidget>
+#include "protocol.h"
 #include "tileitem.h"
+#include "playeritem.h"
 
 Drawer::Drawer(QGraphicsScene *scene, QObject *parent) :
     QObject(parent),
@@ -42,7 +44,21 @@ void Drawer::requestMovement(MapEntity entity, QPoint newPos)
 
 void Drawer::requestNewEntity(MapEntity entity, QPoint pos)
 {
-    // TODO
+    switch (entity.type) {
+    case PLAYER:
+        {
+            PlayerItem *item = new PlayerItem;
+            entities[entity.id] = item;
+            item->setPos(32. * pos.x(), 32. * pos.y());
+            scene->addItem(item);
+            break;
+        }
+    case BOMB:
+        // TODO
+        break;
+    case ITEM:
+        ;// TODO
+    }
 }
 
 void Drawer::requestHavoc(MapEntity entity)

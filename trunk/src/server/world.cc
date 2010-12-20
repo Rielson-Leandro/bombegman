@@ -6,6 +6,7 @@ World::World(const QHostAddress &hostAddress, quint16 port, QObject *parent) :
         host(hostAddress),
         port(port),
         server(new QTcpServer),
+        matchRequestsNumber(0),
         map(new Map)
 {
     connect(server, SIGNAL(newConnection()), this, SLOT(onNewConnection()));
@@ -51,19 +52,34 @@ void World::onNewConnection()
             map->addMapEntity(bomber, QPoint(1, 1));
             break;
         case 1:
-            map->addMapEntity(bomber, QPoint(14, 14));
+            map->addMapEntity(bomber, map->getDimensions() - QPoint(2, 2));
             break;
         case 2:
-            map->addMapEntity(bomber, QPoint(14, 1));
+            map->addMapEntity(bomber, QPoint(map->getDimensions().x() - 2, 1));
             break;
         case 3:
-            map->addMapEntity(bomber, QPoint(1, 14));
+            map->addMapEntity(bomber, QPoint(1, map->getDimensions().y() - 2));
         }
-        players.append(new Player(socket, bomber, this));
+
+        Player *player = new Player(socket, bomber, this);
+        players.append(player);
+        connect(player, SIGNAL(matchRequest()), this, SLOT(onMatchRequest()));
 
         subscribeToServer(subscriptionServerHostAddress, subscriptionServerPort);
     }else{
         delete server->nextPendingConnection();
+    }
+}
+
+void World::onMatchRequest()
+{
+    if (++matchRequestsNumber == players.size()) {
+        foreach (Player *player, players) {
+            foreach (Player *secondPlayer, players) {
+                Bomber *bomber = secondPlayer->getBomber();
+                player->sendNewEntity(PLAYER, bomber->getId(), bomber->pos());
+            }
+        }
     }
 }
 

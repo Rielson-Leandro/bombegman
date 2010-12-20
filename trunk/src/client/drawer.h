@@ -2,7 +2,7 @@
 #define DRAWER_H
 
 #include <QObject>
-#include <QHash>
+#include <QMap>
 #include "mapentity.h"
 
 class QGraphicsScene;
@@ -34,7 +34,7 @@ public slots:
 private:
     QGraphicsScene *scene;
     QGraphicsItem *map[16][16];
-    QHash<int, QGraphicsItem *> entities;
+    QMap<int, QGraphicsItem *> entities;
     TileItem *tiles[16][16];
 
     bool sceneHasReadyButton;
