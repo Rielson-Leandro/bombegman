@@ -26,6 +26,8 @@ public slots:
 
 private slots:
     void onReadyRead();
+    void onEntityMoved(MapEntity*,char);
+    void onNewEntity(char type, char id, QPoint pos);
 
 private:
     QTcpSocket *socket;

@@ -43,6 +43,8 @@ Player::Player(QTcpSocket *socket, Bomber *bomber, QObject *parent) :
         onReadyRead();
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
+    connect(world, SIGNAL(entityMoved(MapEntity*,char)), this, SLOT(onEntityMoved(MapEntity*,char)));
+    connect(world, SIGNAL(newEntity(char,char,QPoint)), this, SLOT(onEntityMoved(MapEntity*,char)));
 }
 
 void Player::sendNewEntity(char type, char id, QPoint pos)
@@ -113,4 +115,14 @@ void Player::decreaseActiveBombs()
 {
     //TODO: check if it can be decreased.
     activeBombs--;
+}
+
+void Player::onEntityMoved(MapEntity *, char)
+{
+    //TODO
+}
+
+void Player::onNewEntity(char type, char id, QPoint pos)
+{
+    //TODO
 }

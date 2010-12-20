@@ -29,14 +29,15 @@ public:
 
     void start(const QHostAddress &subscriptionServerHostAddress = QHostAddress(), quint16 subscriptionServerPort = 0);
 
+    bool addEntity(MapEntity *entity, QPoint pos);
     void removeEntity(MapEntity *entity);
 
     const Map &getMap() const;
-
     void onDestructionRequested(QPoint pos, int range);
 
 signals:
     void entityMoved(MapEntity *entity, char dir);
+    void newEntity(char type, char id, QPoint pos);
 
 private slots:
     void onNewConnection();

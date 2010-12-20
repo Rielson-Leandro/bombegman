@@ -1,9 +1,10 @@
 #include "bomb.h"
+#include "protocol.h"
 
 Bomb::Bomb(World *parent) :
     MapEntity(parent)
 {
-    range = 1;
+    range = 2;
     connect(&timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
     timer.start();
 
@@ -18,6 +19,12 @@ void Bomb::explode()
     }
 }
 
-void Bomb::onTimeOut(){
+void Bomb::onTimeOut()
+{
     explode();
+}
+
+char Bomb::getType()
+{
+    return BOMB;
 }
