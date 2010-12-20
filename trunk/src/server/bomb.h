@@ -17,6 +17,7 @@ private:
 public:
     explicit Bomb(World *parent = 0);
     void explode();
+    char getType();
 
 signals:
 

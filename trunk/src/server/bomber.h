@@ -8,7 +8,7 @@ class Bomber : public MapEntity
 Q_OBJECT
 public:
     explicit Bomber(World *parent = 0);
-
+    char getType();
 signals:
 
 public slots:

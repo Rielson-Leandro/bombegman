@@ -88,6 +88,16 @@ void World::removeEntity(MapEntity *entity)
     map->removeEntity(entity);
 }
 
+bool World::addEntity(MapEntity *entity, QPoint pos)
+{
+    bool wasPossible = map->addMapEntity(entity, pos);
+    if ( wasPossible )
+    {
+        emit newEntity(entity->getType(), entity->getId(), pos);
+    }
+    return wasPossible;
+}
+
 bool World::requestMovement(MapEntity *entity, char dir)
 {
     QPoint pos = entity->pos();

@@ -18,7 +18,7 @@ public:
     virtual bool obstructive() const;
     quint8 getId() const;
     virtual void explode();
-
+    virtual char getType() = 0;
 
 public slots:
     void setPos(const QPoint &p);
