@@ -84,8 +84,27 @@ void Player::onReadyRead()
             } else {
                 return;
             }
+        case INPUT:
+            if (buffer.size() > 1)
+            {
+                if ((int)(buffer[1]) == BOMB_KEY_PRESS)
+                {
+                    qDebug("Bomb holding not yet implemented");
+                }
+                if ((int)(buffer[1]) == BOMB_KEY_RELEASE)
+                {
+                    qDebug("Player %i has released a bomb", (int)(bomber->getId()));
+
+                }
+            }
         default:
             emit streamError();
         }
     }
+}
+
+void Player::decreaseActiveBombs()
+{
+    //TODO: check if it can be decreased.
+    activeBombs--;
 }

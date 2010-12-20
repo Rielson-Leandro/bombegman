@@ -105,3 +105,20 @@ const Map &World::getMap() const
 {
     return *map;
 }
+
+void World::onDestructionRequested(QPoint pos, int range)
+{
+    //Exploding all entities in a cross with the given range.
+    for(int i = -range; i <= range; i++)
+    {
+        foreach(MapEntity *e, this->map->getTile(pos.x() + i, pos.y()).entities)
+        {
+            e->explode();
+        }
+
+        foreach(MapEntity *e, this->map->getTile(pos.x(), pos.y() + i).entities)
+        {
+            e->explode();
+        }
+    }
+}

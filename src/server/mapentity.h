@@ -17,12 +17,11 @@ public:
 
     virtual bool obstructive() const;
     quint8 getId() const;
+    virtual void explode();
+
 
 public slots:
     void setPos(const QPoint &p);
-
-protected:
-    virtual void explode();
 
 private:
     World *m_world;
