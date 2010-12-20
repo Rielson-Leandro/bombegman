@@ -5,7 +5,7 @@ Settings *Settings::instance = NULL;
 Settings::Settings() :
     QSettings("settings.ini", QSettings::IniFormat),
     central_server_host(value("network_parameters/central_server_host",
-                              "bomber.lccv.ufal.br").toString()),
+                              "127.0.0.1").toString()),
     central_server_port(value("network_parameters/central_server_port",
                               50000).toInt()),
     host(value("network_parameters/host", "0.0.0.0").toString()),
