@@ -45,6 +45,12 @@ Player::Player(QTcpSocket *socket, Bomber *bomber, QObject *parent) :
     connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
 }
 
+void Player::sendNewEntity(char type, char id, QPoint pos)
+{
+    char buffer[4] = {NEW_ENTITY, type, id, getByte(pos)};
+    socket->write(buffer, 4);
+}
+
 Player::~Player()
 {
 }

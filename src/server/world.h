@@ -43,6 +43,8 @@ private slots:
 
     void onSubscriptionServerConnected();
 
+    void onMatchRequest();
+
 private:
     void subscribeToServer(const QHostAddress &host, quint16 port);
 
@@ -55,6 +57,8 @@ private:
     QTcpServer *server;
 
     QList<Player*> players;
+    int matchRequestsNumber;
+
     Map *map;
 };
 
