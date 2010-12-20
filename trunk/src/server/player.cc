@@ -44,13 +44,7 @@ Player::Player(QTcpSocket *socket, Bomber *bomber, QObject *parent) :
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
     connect(world, SIGNAL(entityMoved(MapEntity*,char)), this, SLOT(onEntityMoved(MapEntity*,char)));
-    connect(world, SIGNAL(newEntity(char,char,QPoint)), this, SLOT(onEntityMoved(MapEntity*,char)));
-}
-
-void Player::sendNewEntity(char type, char id, QPoint pos)
-{
-    char buffer[4] = {NEW_ENTITY, type, id, getByte(pos)};
-    socket->write(buffer, 4);
+    connect(world, SIGNAL(newEntity(char,char,QPoint)), this, SLOT(onNewEntity(char,char,QPoint)));
 }
 
 Player::~Player()
@@ -117,12 +111,14 @@ void Player::decreaseActiveBombs()
     activeBombs--;
 }
 
-void Player::onEntityMoved(MapEntity *, char)
+void Player::onEntityMoved(MapEntity *entity, char dir)
 {
-    //TODO
+    char buffer[4] = {MOVEMENT, entity->getType(), entity->getId(), dir};
+    socket->write(buffer, 4);
 }
 
 void Player::onNewEntity(char type, char id, QPoint pos)
 {
-    //TODO
+    char buffer[4] = {NEW_ENTITY, type, id, getByte(pos)};
+    socket->write(buffer, 4);
 }

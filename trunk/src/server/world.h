@@ -41,9 +41,7 @@ signals:
 
 private slots:
     void onNewConnection();
-
     void onSubscriptionServerConnected();
-
     void onMatchRequest();
 
 private:

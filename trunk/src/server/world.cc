@@ -75,10 +75,8 @@ void World::onMatchRequest()
 {
     if (++matchRequestsNumber == players.size()) {
         foreach (Player *player, players) {
-            foreach (Player *secondPlayer, players) {
-                Bomber *bomber = secondPlayer->getBomber();
-                player->sendNewEntity(PLAYER, bomber->getId(), bomber->pos());
-            }
+            Bomber *bomber = player->getBomber();
+            emit newEntity(PLAYER, bomber->getId(), bomber->pos());
         }
     }
 }
