@@ -6,7 +6,7 @@
 #include "mapentity.h"
 
 class QGraphicsScene;
-class QGraphicsItem;
+class QGraphicsObject;
 class QPushButton;
 class QGraphicsProxyWidget;
 class TileItem;
@@ -24,7 +24,7 @@ signals:
 public slots:
     void prepareMap(const QPoint dimensions, char map[16][16]);
 
-    void requestMovement(MapEntity entity, QPoint newPos);
+    void requestMovement(MapEntity entity, char dir);
     void requestNewEntity(MapEntity entity, QPoint pos);
     void requestHavoc(MapEntity entity);
 
@@ -33,8 +33,8 @@ public slots:
 
 private:
     QGraphicsScene *scene;
-    QGraphicsItem *map[16][16];
-    QMap<int, QGraphicsItem *> entities;
+    QGraphicsObject *map[16][16];
+    QMap<int, QGraphicsObject *> entities;
     TileItem *tiles[16][16];
 
     bool sceneHasReadyButton;

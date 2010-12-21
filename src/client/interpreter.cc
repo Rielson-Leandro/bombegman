@@ -81,7 +81,7 @@ void Interpreter::onReadyRead()
             case MOVEMENT:
                 if (buffer.size() > 3) {
                     emit movementRequest(MapEntity(buffer[1], buffer[2]),
-                                         MapEntity::getPos(buffer[3]));
+                                         buffer[3]);
                     buffer.remove(0, 4);
                     break;
                 } else {

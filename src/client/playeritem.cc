@@ -1,6 +1,11 @@
 #include "playeritem.h"
 #include <QPainter>
 
+namespace Protocol
+{
+#include "protocol.h"
+}
+
 enum Dir
 {
     EAST,
@@ -28,7 +33,8 @@ static const QImage *spritesset[] =
 PlayerItem::PlayerItem(QGraphicsItem *parent) :
     QGraphicsObject(parent),
     dir(SOUTH),
-    state(0)
+    state(0),
+    animate(false)
 {
     if (!spritesset[0]) {
         spritesset[0] = new QImage(":/gfx/bombere0");
@@ -44,6 +50,9 @@ PlayerItem::PlayerItem(QGraphicsItem *parent) :
         spritesset[10] = new QImage(":/gfx/bomberw1");
         spritesset[11] = new QImage(":/gfx/bomberw2");
     }
+    connect(&timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
+    timer.setSingleShot(false);
+    timer.start(100);
 }
 
 QRectF PlayerItem::boundingRect() const
@@ -53,5 +62,46 @@ QRectF PlayerItem::boundingRect() const
 
 void PlayerItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
-    painter->drawImage(0, -32, *spritesset[dir * 3 + state]);
+    if (animate)
+        painter->drawImage(0, -32, *spritesset[dir * 3 + state]);
+    else
+        painter->drawImage(0, -32, *spritesset[dir * 3]);
+}
+
+void PlayerItem::setDir(char dir)
+{
+    int enumeratedDir;
+    switch (dir) {
+    case Protocol::NORTH:
+        enumeratedDir = NORTH;
+        break;
+    case Protocol::EAST:
+        enumeratedDir = EAST;
+        break;
+    case Protocol::SOUTH:
+        enumeratedDir = SOUTH;
+        break;
+    case Protocol::WEST:
+        enumeratedDir = WEST;
+    }
+    if (this->dir != enumeratedDir) {
+        this->dir = enumeratedDir;
+        update();
+    }
+}
+
+void PlayerItem::onTimeout()
+{
+    ++state;
+    state %= 3;
+}
+
+void PlayerItem::startAnimated()
+{
+    animate = true;
+}
+
+void PlayerItem::stopAnimated()
+{
+    animate = false;
 }

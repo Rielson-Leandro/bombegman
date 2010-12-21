@@ -24,7 +24,7 @@ signals:
     void idReceived(quint8);
     void mapReceived();
 
-    void movementRequest(MapEntity entity, QPoint newPos);
+    void movementRequest(MapEntity entity, char dir);
     void newEntityRequest(MapEntity entity, QPoint pos);
     void havocRequest(MapEntity entity);
 

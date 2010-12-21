@@ -20,7 +20,7 @@ World::World(QObject *parent) :
     connect(inputHandler, SIGNAL(requestMovement(char)), formatter, SLOT(requestMovement(char)));
     connect(inputHandler, SIGNAL(requestInput(char)), formatter, SLOT(requestInput(char)));
     connect(interpreter, SIGNAL(newEntityRequest(MapEntity,QPoint)), drawer, SLOT(requestNewEntity(MapEntity,QPoint)));
-    connect(interpreter, SIGNAL(movementRequest(MapEntity,QPoint)), drawer, SLOT(requestMovement(MapEntity,QPoint)));
+    connect(interpreter, SIGNAL(movementRequest(MapEntity,char)), drawer, SLOT(requestMovement(MapEntity,char)));
     connect(interpreter, SIGNAL(havocRequest(MapEntity)), drawer, SLOT(requestHavoc(MapEntity)));
     connect(drawer, SIGNAL(removeButtonClicked()), formatter, SLOT(requestMatch()));
     connect(drawer, SIGNAL(removeButtonClicked()), drawer, SLOT(removeReadyButton()));
