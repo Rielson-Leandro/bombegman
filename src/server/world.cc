@@ -131,7 +131,7 @@ const Map &World::getMap() const
     return *map;
 }
 
-void World::onDestructionRequested(QPoint pos, int range)
+void World::requestExplosion(const QPoint &pos, int range)
 {
     QSet<MapEntity *> deadEntities;
     //Exploding all entities in a cross with the given range.

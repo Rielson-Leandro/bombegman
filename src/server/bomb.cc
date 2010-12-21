@@ -2,10 +2,11 @@
 #include "protocol.h"
 #include "player.h"
 
-Bomb::Bomb(World *parent) :
-    MapEntity(parent)
+Bomb::Bomb(World *world, Player *player) :
+    MapEntity(world),
+    owner(player),
+    range(2)
 {
-    range = 2;
     connect(&timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
     timer.start(3000);
 }
@@ -13,12 +14,12 @@ Bomb::Bomb(World *parent) :
 void Bomb::explode()
 {
     if(!exploded){
-        world()->onDestructionRequested(pos(), range);
-        if(ownerPlayer)
-        {
-            ownerPlayer->decreaseActiveBombs();
-        }
         exploded = true;
+        world()->requestExplosion(pos(), range);
+        if(owner)
+        {
+            owner->decreaseActiveBombs();
+        }
     }
 }
 

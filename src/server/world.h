@@ -23,7 +23,7 @@ public:
     ~World();
 
     bool requestMovement(MapEntity *entity, char dir);
-    void requestExplosion(const QPoint &);
+    void requestExplosion(const QPoint &pos, int range);
 
     // time is in miliseconds
     void startMatch(int matchTimeLimit);
@@ -34,7 +34,6 @@ public:
     void removeEntity(MapEntity *entity);
 
     const Map &getMap() const;
-    void onDestructionRequested(QPoint pos, int range);
 
 signals:
     void entityMoved(MapEntity *entity, char dir);
