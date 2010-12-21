@@ -1,11 +1,13 @@
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
+#include <QPoint>
+
 enum Entity
 {
     PLAYER = 'P',
     BOMB   = 'B',
-    BLOCK  = 'T',
+    TILE   = 'T',
     ITEM   = 'I'
 };
 
@@ -15,7 +17,8 @@ enum Action
     NEW_ENTITY = 'N',
     DESTROYED  = 'D',
     INPUT      = 'I',
-    REQUEST    = 'R'
+    REQUEST    = 'R',
+    EXPLOSION  = 'E'
 };
 
 enum Input
@@ -36,5 +39,20 @@ enum
 {
     MATCH = 'M'
 };
+
+inline QPoint getPos(unsigned char byte)
+{
+    const int x = (byte & 0xF0) >> 4;
+    const int y = byte & 0x0F;
+    return QPoint(x, y);
+}
+
+inline unsigned char getByte(QPoint point)
+{
+    const unsigned char x = point.x(), y = point.y();
+    unsigned char byte = x << 4;
+    byte |= y;
+    return byte;
+}
 
 #endif // PROTOCOL_H

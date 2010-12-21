@@ -5,7 +5,7 @@ enum Entity
 {
     PLAYER = 'P',
     BOMB   = 'B',
-    BLOCK  = 'T',
+    TILE   = 'T',
     ITEM   = 'I'
 };
 
@@ -15,7 +15,8 @@ enum Action
     NEW_ENTITY = 'N',
     DESTROYED  = 'D',
     INPUT      = 'I',
-    REQUEST    = 'R'
+    REQUEST    = 'R',
+    EXPLOSION  = 'E'
 };
 
 enum Input

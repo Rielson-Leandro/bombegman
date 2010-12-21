@@ -103,7 +103,21 @@ void Drawer::requestNewEntity(MapEntity entity, QPoint pos)
     }
 }
 
-void Drawer::requestHavoc(MapEntity entity)
+void Drawer::requestEntityDestroyed(MapEntity entity)
+{
+    if (entity.type == TILE) {
+        QPoint p = entity.getPos();
+        TileItem *item = tiles[p.x()][p.y()];
+        item->setState(TileItem::EMPTY);
+    } else {
+        QGraphicsObject *item = entities.value(entity.id, NULL);
+        scene->removeItem(item);
+        delete item;
+    }
+}
+
+void Drawer::requestExplosion(QPoint center, int northRange, int eastRange,
+                              int southRange, int westRange)
 {
     // TODO
 }
