@@ -1,22 +1,6 @@
 #include "player.h"
 #include "protocol.h"
 
-
-inline QPoint getPos(unsigned char byte)
-{
-    const int x = (byte & 0xF0) >> 4;
-    const int y = byte & 0x0F;
-    return QPoint(x, y);
-}
-
-inline unsigned char getByte(QPoint point)
-{
-    const unsigned char x = point.x(), y = point.y();
-    unsigned char byte = x << 4;
-    byte |= y;
-    return byte;
-}
-
 Player::Player(QTcpSocket *socket, Bomber *bomber, QObject *parent) :
     QObject(parent),
     socket(socket),
@@ -42,8 +26,14 @@ Player::Player(QTcpSocket *socket, Bomber *bomber, QObject *parent) :
         onReadyRead();
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(onReadyRead()));
-    connect(world, SIGNAL(entityMoved(MapEntity*,char)), this, SLOT(onEntityMoved(MapEntity*,char)));
-    connect(world, SIGNAL(newEntity(char,char,QPoint)), this, SLOT(onNewEntity(char,char,QPoint)));
+    connect(world, SIGNAL(entityMoved(MapEntity*,char)),
+            this, SLOT(onEntityMoved(MapEntity*,char)));
+    connect(world, SIGNAL(newEntity(char,char,QPoint)),
+            this, SLOT(onNewEntity(char,char,QPoint)));
+    connect(world, SIGNAL(entityDestroyed(char,char)),
+            this, SLOT(onEntityDestroyed(char,char)));
+    connect(world, SIGNAL(explosion(QPoint,int,int,int,int)),
+            this, SLOT(onExplosion(QPoint,int,int,int,int)));
 }
 
 Player::~Player()
@@ -79,7 +69,8 @@ void Player::onReadyRead()
             if (buffer.size() > 1)
             {
                 if (bomber->world()->requestMovement(bomber, buffer[1]))
-                    qDebug("Player %i moving %c", (int)(bomber->getId()), (char)(buffer[1]));
+                    qDebug("Player %i moving %c", (int)(bomber->getId()),
+                           (char)(buffer[1]));
 
                 buffer.remove(0, 2);
             } else {
@@ -121,7 +112,6 @@ void Player::onReadyRead()
 
 void Player::decreaseActiveBombs()
 {
-    //TODO: check if it can be decreased.
     --activeBombs;
 }
 
@@ -135,4 +125,16 @@ void Player::onNewEntity(char type, char id, QPoint pos)
 {
     char buffer[4] = {NEW_ENTITY, type, id, getByte(pos)};
     socket->write(buffer, 4);
+}
+
+void Player::onEntityDestroyed(char type, char id)
+{
+    char buffer[3] = {DESTROYED, type, id};
+    socket->write(buffer, 3);
+}
+
+void Player::onExplosion(QPoint pos, int north, int east, int south, int west)
+{
+    char buffer[6] = {EXPLOSION, getByte(pos), north, east, south, west};
+    socket->write(buffer, 6);
 }

@@ -28,6 +28,8 @@ private slots:
     void onReadyRead();
     void onEntityMoved(MapEntity *entity, char dir);
     void onNewEntity(char type, char id, QPoint pos);
+    void onEntityDestroyed(char type, char id);
+    void onExplosion(QPoint pos, int north, int east, int south, int west);
 
 private:
     QTcpSocket *socket;

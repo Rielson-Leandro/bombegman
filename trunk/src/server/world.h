@@ -38,6 +38,8 @@ public:
 signals:
     void entityMoved(MapEntity *entity, char dir);
     void newEntity(char type, char id, QPoint pos);
+    void entityDestroyed(char type, char id);
+    void explosion(QPoint pos, int north, int east, int south, int west);
 
 private slots:
     void onNewConnection();

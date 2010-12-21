@@ -98,8 +98,20 @@ void Interpreter::onReadyRead()
                 }
             case DESTROYED:
                 if (buffer.size() > 2) {
-                    emit havocRequest(MapEntity(buffer[1], buffer[2]));
+                    emit entityDestroyedRequest(MapEntity(buffer[1], buffer[2]));
                     buffer.remove(0, 3);
+                    break;
+                } else {
+                    return;
+                }
+            case EXPLOSION:
+                if (buffer.size() > 5) {
+                    emit explosionRequest(MapEntity::getPos(buffer[1]),
+                                          buffer[2],
+                                          buffer[3],
+                                          buffer[4],
+                                          buffer[5]);
+                    buffer.remove(0, 6);
                     break;
                 } else {
                     return;

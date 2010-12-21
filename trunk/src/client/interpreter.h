@@ -26,7 +26,8 @@ signals:
 
     void movementRequest(MapEntity entity, char dir);
     void newEntityRequest(MapEntity entity, QPoint pos);
-    void havocRequest(MapEntity entity);
+    void entityDestroyedRequest(MapEntity entity);
+    void explosionRequest(QPoint, int north, int east, int south, int west);
 
 private slots:
     void onReadyRead();

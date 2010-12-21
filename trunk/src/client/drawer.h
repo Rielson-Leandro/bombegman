@@ -26,7 +26,9 @@ public slots:
 
     void requestMovement(MapEntity entity, char dir);
     void requestNewEntity(MapEntity entity, QPoint pos);
-    void requestHavoc(MapEntity entity);
+    void requestEntityDestroyed(MapEntity entity);
+    void requestExplosion(QPoint center, int northRange, int eastRange,
+                          int southRange, int westRange);
 
     void addReadyButton();
     void removeReadyButton();

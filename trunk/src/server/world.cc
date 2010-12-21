@@ -145,7 +145,8 @@ void World::requestExplosion(const QPoint &pos, int range)
             foundObstruction = true;
         }
         if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::BRICK) {
-            // TODO: this entity must become an empty space.
+            map->getTile(pos.x() + i, pos.y()).space = Map::Tile::EMPTY;
+            emit entityDestroyed(TILE, getByte(QPoint(pos.x() + i, pos.y())));
         }
 
         foreach(MapEntity *e, map->getTile(pos.x() + i, pos.y()).entities)
@@ -163,7 +164,8 @@ void World::requestExplosion(const QPoint &pos, int range)
             foundObstruction = true;
         }
         if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::BRICK) {
-            // TODO: this entity must become an empty space.
+            map->getTile(pos.x() + i, pos.y()).space = Map::Tile::EMPTY;
+            emit entityDestroyed(TILE, getByte(QPoint(pos.x() + i, pos.y())));
         }
 
         foreach(MapEntity *e, map->getTile(pos.x() + i, pos.y()).entities)
@@ -176,7 +178,7 @@ void World::requestExplosion(const QPoint &pos, int range)
     }
 
     //Now, we must do the same to the Y direction:
-        //Downwards:
+        //Upwards:
     foundObstruction = false;
     for(int i = 0; i >= -range && !foundObstruction; i--)
     {
@@ -184,7 +186,8 @@ void World::requestExplosion(const QPoint &pos, int range)
             foundObstruction = true;
         }
         if (map->getTile(pos.x(), pos.y() + i).space == Map::Tile::BRICK) {
-            // TODO: this entity must become an empty space.
+            map->getTile(pos.x(), pos.y() + i).space = Map::Tile::EMPTY;
+            emit entityDestroyed(TILE, getByte(QPoint(pos.x(), pos.y() + i)));
         }
 
         foreach(MapEntity *e, map->getTile(pos.x(), pos.y() + i).entities)
@@ -195,7 +198,7 @@ void World::requestExplosion(const QPoint &pos, int range)
             deadEntities << e;
         }
     }
-        //And upwards:
+        //And downwards:
     foundObstruction = false;
     for(int i = 0; i <= range && !foundObstruction; i++)
     {
@@ -203,7 +206,8 @@ void World::requestExplosion(const QPoint &pos, int range)
             foundObstruction = true;
         }
         if (map->getTile(pos.x(), pos.y() + i).space == Map::Tile::BRICK) {
-            // TODO: this entity must become an empty space.
+            map->getTile(pos.x(), pos.y() + i).space = Map::Tile::EMPTY;
+            emit entityDestroyed(TILE, getByte(QPoint(pos.x(), pos.y() + i)));
         }
 
         foreach(MapEntity *e, map->getTile(pos.x(), pos.y() + i).entities)
@@ -217,6 +221,7 @@ void World::requestExplosion(const QPoint &pos, int range)
 
     //Collecting the dead bodies:
     foreach (MapEntity *e, deadEntities) {
+        emit entityDestroyed(e->getType(), e->getId());
         map->removeEntity(e);
         delete e;
     }
