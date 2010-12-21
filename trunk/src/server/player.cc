@@ -92,7 +92,7 @@ void Player::onReadyRead()
                 switch ((int)(buffer[1])) {
                 case BOMB_KEY_PRESS:
                     {
-                        Bomb *bomb = new Bomb;
+                        Bomb *bomb = new Bomb(world, this);
                         if (!world->addEntity(bomb,this->bomber->pos()))
                         {
                             delete bomb;
@@ -122,7 +122,7 @@ void Player::onReadyRead()
 void Player::decreaseActiveBombs()
 {
     //TODO: check if it can be decreased.
-    activeBombs--;
+    --activeBombs;
 }
 
 void Player::onEntityMoved(MapEntity *entity, char dir)

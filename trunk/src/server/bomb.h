@@ -10,20 +10,19 @@ class Player;
 class Bomb : public MapEntity
 {
 Q_OBJECT
-private:
-    Player *ownerPlayer;
-    bool exploded;
-    int range;
-    QTimer timer;
 public:
-    explicit Bomb(World *parent = 0);
+    explicit Bomb(World *world, Player *player = NULL);
     void explode();
     char getType();
 
-signals:
-
 private slots:
     void onTimeOut();
+
+private:
+    Player *owner;
+    bool exploded;
+    int range;
+    QTimer timer;
 };
 
 #endif // BOMB_H
