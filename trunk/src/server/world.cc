@@ -141,37 +141,37 @@ void World::onDestructionRequested(QPoint pos, int range)
         //To the left:
     for(int i = 0; i >= -range && !foundObstruction; i--)
     {
-        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::BRICK) {
-            // TODO: this entity must become an empty space.
+        if (map->getTile(pos.x() + i, pos.y()).space != Map::Tile::EMPTY) {
             foundObstruction = true;
         }
-        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::WALL) {
-            foundObstruction = true;
+        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::BRICK) {
+            // TODO: this entity must become an empty space.
         }
 
         foreach(MapEntity *e, map->getTile(pos.x() + i, pos.y()).entities)
         {
+            if (e->obstructive())
+                foundObstruction = true;
             e->explode();
             deadEntities << e;
-            foundObstruction = true;
         }
     }
         //To the right:
     for(int i = 0; i <= range && !foundObstruction; i++)
     {
-        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::BRICK) {
-            // TODO: this entity must become an empty space.
+        if (map->getTile(pos.x() + i, pos.y()).space != Map::Tile::EMPTY) {
             foundObstruction = true;
         }
-        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::WALL) {
-            foundObstruction = true;
+        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::BRICK) {
+            // TODO: this entity must become an empty space.
         }
 
         foreach(MapEntity *e, map->getTile(pos.x() + i, pos.y()).entities)
         {
+            if (e->obstructive())
+                foundObstruction = true;
             e->explode();
             deadEntities << e;
-            foundObstruction = true;
         }
     }
 
@@ -180,36 +180,38 @@ void World::onDestructionRequested(QPoint pos, int range)
     foundObstruction = false;
     for(int i = 0; i >= -range && !foundObstruction; i--)
     {
+        if (map->getTile(pos.x(), pos.y() + i).space != Map::Tile::EMPTY) {
+            foundObstruction = true;
+        }
         if (map->getTile(pos.x(), pos.y() + i).space == Map::Tile::BRICK) {
             // TODO: this entity must become an empty space.
-            foundObstruction = true;
         }
-        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::WALL) {
-            foundObstruction = true;
-        }
+
         foreach(MapEntity *e, map->getTile(pos.x(), pos.y() + i).entities)
         {
+            if (e->obstructive())
+                foundObstruction = true;
             e->explode();
             deadEntities << e;
-            foundObstruction = true;
         }
     }
         //And upwards:
     foundObstruction = false;
     for(int i = 0; i <= range && !foundObstruction; i++)
     {
+        if (map->getTile(pos.x(), pos.y() + i).space != Map::Tile::EMPTY) {
+            foundObstruction = true;
+        }
         if (map->getTile(pos.x(), pos.y() + i).space == Map::Tile::BRICK) {
             // TODO: this entity must become an empty space.
-            foundObstruction = true;
         }
-        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::WALL) {
-            foundObstruction = true;
-        }
+
         foreach(MapEntity *e, map->getTile(pos.x(), pos.y() + i).entities)
         {
+            if (e->obstructive())
+                foundObstruction = true;
             e->explode();
             deadEntities << e;
-            foundObstruction = true;
         }
     }
 
