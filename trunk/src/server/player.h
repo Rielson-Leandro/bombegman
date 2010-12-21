@@ -3,6 +3,9 @@
 
 #include <QObject>
 #include "bomber.h"
+#include "mapentity.h"
+#include "bomb.h"
+#include "world.h"
 
 class World;
 

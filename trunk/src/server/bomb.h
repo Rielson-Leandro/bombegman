@@ -2,9 +2,10 @@
 #define BOMB_H
 
 #include "mapentity.h"
-#include "player.h"
 #include "world.h"
 #include <QTimer>
+
+class Player;
 
 class Bomb : public MapEntity
 {

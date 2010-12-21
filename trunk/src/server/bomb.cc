@@ -1,13 +1,13 @@
 #include "bomb.h"
 #include "protocol.h"
+#include "player.h"
 
 Bomb::Bomb(World *parent) :
     MapEntity(parent)
 {
     range = 2;
     connect(&timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
-    timer.start();
-
+    timer.start(3000);
 }
 
 void Bomb::explode()
