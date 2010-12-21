@@ -2,6 +2,7 @@
 #define PLAYERITEM_H
 
 #include <QGraphicsObject>
+#include <QTimer>
 
 class PlayerItem : public QGraphicsObject
 {
@@ -12,9 +13,20 @@ public:
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *);
 
+    void setDir(char dir);
+
+public slots:
+    void startAnimated();
+    void stopAnimated();
+
+private slots:
+    void onTimeout();
+
 private:
     int dir;
     int state;
+    QTimer timer;
+    bool animate;
 };
 
 #endif // PLAYERITEM_H

@@ -6,6 +6,9 @@
 #include "tileitem.h"
 #include "playeritem.h"
 #include "bombitem.h"
+#include <QPropertyAnimation>
+#include <QTimeLine>
+#include <QDebug>
 
 Drawer::Drawer(QGraphicsScene *scene, QObject *parent) :
     QObject(parent),
@@ -38,9 +41,39 @@ void Drawer::prepareMap(const QPoint dimensions, char map[16][16])
     }
 }
 
-void Drawer::requestMovement(MapEntity entity, QPoint newPos)
+void Drawer::requestMovement(MapEntity entity, char dir)
 {
-    // TODO
+    QGraphicsObject *item = entities.value(entity.id, NULL);
+    if (item) {
+        QPointF p = item->pos();
+        switch (dir) {
+        case NORTH:
+            p.ry() -= 32.;
+            break;
+        case EAST:
+            p.rx() += 32.;
+            break;
+        case SOUTH:
+            p.ry() += 32.;
+            break;
+        case WEST:
+            p.rx() -= 32.;
+        }
+
+        QPropertyAnimation *animation = new QPropertyAnimation(item, "pos", this);
+        animation->setEndValue(p);
+        animation->setDuration(200);
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+        {
+            PlayerItem *playerItem = dynamic_cast<PlayerItem *>(item);
+            if (playerItem) {
+                playerItem->setDir(dir);
+                playerItem->startAnimated();
+                connect(animation, SIGNAL(finished()), playerItem, SLOT(stopAnimated()));
+            }
+        }
+    }
 }
 
 void Drawer::requestNewEntity(MapEntity entity, QPoint pos)
