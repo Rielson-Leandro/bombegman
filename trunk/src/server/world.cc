@@ -158,6 +158,7 @@ void World::requestExplosion(const QPoint &pos, int range)
         }
     }
         //To the right:
+    foundObstruction = false;
     for(int i = 0; i <= range && !foundObstruction; i++)
     {
         if (map->getTile(pos.x() + i, pos.y()).space != Map::Tile::EMPTY) {
