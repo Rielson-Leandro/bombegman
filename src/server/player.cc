@@ -1,7 +1,6 @@
 #include "player.h"
-#include "world.h"
 #include "protocol.h"
-#include "mapentity.h"
+
 
 inline QPoint getPos(unsigned char byte)
 {
@@ -92,9 +91,16 @@ void Player::onReadyRead()
             {
                 switch ((int)(buffer[1])) {
                 case BOMB_KEY_PRESS:
-                    // TODO
-                    buffer.remove(0, 2);
-                    break;
+                    {
+                        Bomb *bomb = new Bomb;
+                        if (!world->addEntity(bomb,this->bomber->pos()))
+                        {
+                            delete bomb;
+                        }
+
+                        buffer.remove(0, 2);
+                        break;
+                    }
                 case BOMB_KEY_RELEASE:
                     buffer.remove(0, 2);
                     break;

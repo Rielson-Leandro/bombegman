@@ -1,5 +1,6 @@
 #include "world.h"
 #include "protocol.h"
+#include "player.h"
 
 World::World(const QHostAddress &hostAddress, quint16 port, QObject *parent) :
         QObject(parent),
@@ -137,7 +138,16 @@ void World::onDestructionRequested(QPoint pos, int range)
     {
         foreach(MapEntity *e, this->map->getTile(pos.x() + i, pos.y()).entities)
         {
-            e->explode();
+            if (e->getType() == Map::Tile::BRICK)
+            {
+                e->explode();
+                break;
+                //TODO: this entity must become an empty space.
+            }
+            if (e->getType() == Map::Tile::WALL)
+            {
+                break;
+            }
         }
 
         foreach(MapEntity *e, this->map->getTile(pos.x(), pos.y() + i).entities)

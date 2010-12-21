@@ -9,9 +9,10 @@
 #include <QPoint>
 
 #include "map.h"
-#include "player.h"
 #include "mapentity.h"
 #include "bomber.h"
+
+class Player;
 
 
 class World : public QObject
