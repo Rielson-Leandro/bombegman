@@ -133,26 +133,29 @@ const Map &World::getMap() const
 
 void World::onDestructionRequested(QPoint pos, int range)
 {
+    QSet<MapEntity *> deadEntities;
     //Exploding all entities in a cross with the given range.
     for(int i = -range; i <= range; i++)
     {
-        foreach(MapEntity *e, this->map->getTile(pos.x() + i, pos.y()).entities)
-        {
-            if (e->getType() == Map::Tile::BRICK)
-            {
-                e->explode();
-                break;
-                //TODO: this entity must become an empty space.
-            }
-            if (e->getType() == Map::Tile::WALL)
-            {
-                break;
-            }
+        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::BRICK) {
+            // TODO: this entity must become an empty space.
         }
-
-        foreach(MapEntity *e, this->map->getTile(pos.x(), pos.y() + i).entities)
+        if (map->getTile(pos.x(), pos.y() + i).space == Map::Tile::BRICK) {
+            // TODO: this entity must become an empty space.
+        }
+        foreach(MapEntity *e, map->getTile(pos.x() + i, pos.y()).entities)
         {
             e->explode();
+            deadEntities << e;
         }
+        foreach(MapEntity *e, map->getTile(pos.x(), pos.y() + i).entities)
+        {
+            e->explode();
+            deadEntities << e;
+        }
+    }
+    foreach (MapEntity *e, deadEntities) {
+        map->removeEntity(e);
+        delete e;
     }
 }

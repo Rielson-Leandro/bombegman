@@ -14,7 +14,10 @@ void Bomb::explode()
 {
     if(!exploded){
         world()->onDestructionRequested(pos(), range);
-        ownerPlayer->decreaseActiveBombs();
+        if(ownerPlayer)
+        {
+            ownerPlayer->decreaseActiveBombs();
+        }
         exploded = true;
     }
 }

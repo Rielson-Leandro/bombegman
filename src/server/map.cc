@@ -72,6 +72,11 @@ const Map::Tile &Map::getTile(int x, int y) const
     return tiles[x][y];
 }
 
+Map::Tile &Map::getTile(int x, int y)
+{
+    return tiles[x][y];
+}
+
 /* The following method will generate the map according to the parameters set
 in the configuration file. Basically it will set the borders, bases, pillars
 and randomly fill the entery maps with bricks or empty spaces. The amount of
