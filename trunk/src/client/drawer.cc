@@ -5,6 +5,7 @@
 #include "protocol.h"
 #include "tileitem.h"
 #include "playeritem.h"
+#include "bombitem.h"
 
 Drawer::Drawer(QGraphicsScene *scene, QObject *parent) :
     QObject(parent),
@@ -50,11 +51,19 @@ void Drawer::requestNewEntity(MapEntity entity, QPoint pos)
             PlayerItem *item = new PlayerItem;
             entities[entity.id] = item;
             item->setPos(32. * pos.x(), 32. * pos.y());
+            item->setZValue(2.);
             scene->addItem(item);
             break;
         }
     case BOMB:
-        // TODO
+        {
+            BombItem *item = new BombItem;
+            entities[entity.id] = item;
+            item->setPos(32. * pos.x(), 32. * pos.y());
+            item->setZValue(1.);
+            scene->addItem(item);
+            break;
+        }
         break;
     case ITEM:
         ;// TODO
