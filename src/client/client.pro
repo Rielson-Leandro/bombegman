@@ -16,7 +16,8 @@ SOURCES += main.cc \
     menuscene.cc \
     gamescene.cc \
     tileitem.cc \
-    playeritem.cc
+    playeritem.cc \
+    bombitem.cc
 HEADERS += mainwindow.h \
     world.h \
     interpreter.h \
@@ -29,5 +30,6 @@ HEADERS += mainwindow.h \
     mapentity.h \
     gamescene.h \
     tileitem.h \
-    playeritem.h
+    playeritem.h \
+    bombitem.h
 RESOURCES += std.qrc
