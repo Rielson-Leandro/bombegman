@@ -135,25 +135,85 @@ void World::onDestructionRequested(QPoint pos, int range)
 {
     QSet<MapEntity *> deadEntities;
     //Exploding all entities in a cross with the given range.
-    for(int i = -range; i <= range; i++)
+    bool foundObstruction = false;
+
+    //First let's explode in the X direction:
+        //To the left:
+    for(int i = 0; i >= -range && !foundObstruction; i--)
     {
         if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::BRICK) {
             // TODO: this entity must become an empty space.
+            foundObstruction = true;
         }
-        if (map->getTile(pos.x(), pos.y() + i).space == Map::Tile::BRICK) {
-            // TODO: this entity must become an empty space.
+        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::WALL) {
+            foundObstruction = true;
         }
+
         foreach(MapEntity *e, map->getTile(pos.x() + i, pos.y()).entities)
         {
             e->explode();
             deadEntities << e;
+            foundObstruction = true;
+        }
+    }
+        //To the right:
+    for(int i = 0; i <= range && !foundObstruction; i++)
+    {
+        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::BRICK) {
+            // TODO: this entity must become an empty space.
+            foundObstruction = true;
+        }
+        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::WALL) {
+            foundObstruction = true;
+        }
+
+        foreach(MapEntity *e, map->getTile(pos.x() + i, pos.y()).entities)
+        {
+            e->explode();
+            deadEntities << e;
+            foundObstruction = true;
+        }
+    }
+
+    //Now, we must do the same to the Y direction:
+        //Downwards:
+    foundObstruction = false;
+    for(int i = 0; i >= -range && !foundObstruction; i--)
+    {
+        if (map->getTile(pos.x(), pos.y() + i).space == Map::Tile::BRICK) {
+            // TODO: this entity must become an empty space.
+            foundObstruction = true;
+        }
+        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::WALL) {
+            foundObstruction = true;
         }
         foreach(MapEntity *e, map->getTile(pos.x(), pos.y() + i).entities)
         {
             e->explode();
             deadEntities << e;
+            foundObstruction = true;
         }
     }
+        //And upwards:
+    foundObstruction = false;
+    for(int i = 0; i <= range && !foundObstruction; i++)
+    {
+        if (map->getTile(pos.x(), pos.y() + i).space == Map::Tile::BRICK) {
+            // TODO: this entity must become an empty space.
+            foundObstruction = true;
+        }
+        if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::WALL) {
+            foundObstruction = true;
+        }
+        foreach(MapEntity *e, map->getTile(pos.x(), pos.y() + i).entities)
+        {
+            e->explode();
+            deadEntities << e;
+            foundObstruction = true;
+        }
+    }
+
+    //Collecting the dead bodies:
     foreach (MapEntity *e, deadEntities) {
         map->removeEntity(e);
         delete e;
