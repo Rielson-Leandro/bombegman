@@ -6,6 +6,7 @@
 #include "tileitem.h"
 #include "playeritem.h"
 #include "bombitem.h"
+#include "explosiontileitem.h"
 #include <QPropertyAnimation>
 #include <QTimeLine>
 #include <QDebug>
@@ -119,7 +120,65 @@ void Drawer::requestEntityDestroyed(MapEntity entity)
 void Drawer::requestExplosion(QPoint center, int northRange, int eastRange,
                               int southRange, int westRange)
 {
-    // TODO
+    QGraphicsItem *item = new ExplosionTileItem(ExplosionTileItem::CENTER);
+    item->setPos(center.x() * 32, center.y() * 32);
+    scene->addItem(item);
+
+    --northRange;
+    for (int i = 1;i < northRange;++i) {
+        item = new ExplosionTileItem(ExplosionTileItem::VERTICAL);
+        item->setPos(center.x() * 32, (center.y() - i) * 32);
+        item->setZValue(.5);
+        scene->addItem(item);
+    }
+    if (northRange) {
+        item = new ExplosionTileItem(ExplosionTileItem::NORTH);
+        item->setPos(center.x() * 32, (center.y() - northRange) * 32);
+        item->setZValue(.5);
+        scene->addItem(item);
+    }
+
+    --eastRange;
+    for (int i = 1;i < eastRange;++i) {
+        item = new ExplosionTileItem(ExplosionTileItem::HORIZONTAL);
+        item->setPos((center.x() + i) * 32, center.y() * 32);
+        item->setZValue(.5);
+        scene->addItem(item);
+    }
+    if (eastRange) {
+        item = new ExplosionTileItem(ExplosionTileItem::EAST);
+        item->setPos((center.x() + eastRange) * 32, center.y() * 32);
+        item->setZValue(.5);
+        scene->addItem(item);
+    }
+
+    --southRange;
+    for (int i = 1;i < southRange;++i) {
+        item = new ExplosionTileItem(ExplosionTileItem::VERTICAL);
+        item->setPos(center.x() * 32, (center.y() + i) * 32);
+        item->setZValue(.5);
+        scene->addItem(item);
+    }
+    if (southRange) {
+        item = new ExplosionTileItem(ExplosionTileItem::SOUTH);
+        item->setPos(center.x() * 32, (center.y() + southRange) * 32);
+        item->setZValue(.5);
+        scene->addItem(item);
+    }
+
+    --westRange;
+    for (int i = 1;i < westRange;++i) {
+        item = new ExplosionTileItem(ExplosionTileItem::HORIZONTAL);
+        item->setPos((center.x() - i) * 32, center.y() * 32);
+        item->setZValue(.5);
+        scene->addItem(item);
+    }
+    if (westRange) {
+        item = new ExplosionTileItem(ExplosionTileItem::WEST);
+        item->setPos((center.x() - westRange) * 32, center.y() * 32);
+        item->setZValue(.5);
+        scene->addItem(item);
+    }
 }
 
 void Drawer::addReadyButton()

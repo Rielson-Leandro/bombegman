@@ -37,6 +37,8 @@ private:
     Bomber *bomber;
     World *world;
     int activeBombs;
+    int maxBombs;
+    QTimer movementLock;
 };
 
 inline Bomber *Player::getBomber()
