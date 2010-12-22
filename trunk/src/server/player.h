@@ -35,6 +35,7 @@ private:
     QTcpSocket *socket;
     QByteArray buffer;
     Bomber *bomber;
+    char id;
     World *world;
     int activeBombs;
     int maxBombs;

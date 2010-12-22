@@ -5,6 +5,7 @@ Player::Player(QTcpSocket *socket, Bomber *bomber, QObject *parent) :
     QObject(parent),
     socket(socket),
     bomber(bomber),
+    id(bomber->getId()),
     world(bomber->world()),
     activeBombs(0),
     maxBombs(2)
@@ -72,7 +73,7 @@ void Player::onReadyRead()
         case MOVEMENT:
             if (buffer.size() > 1)
             {
-                if (!movementLock.isActive()) {
+                if (!movementLock.isActive() && bomber) {
                     bomber->world()->requestMovement(bomber, buffer[1]);
                     movementLock.start(200);
                 }
@@ -87,7 +88,7 @@ void Player::onReadyRead()
             {
                 switch ((int)(buffer[1])) {
                 case BOMB_KEY_PRESS:
-                    if (activeBombs < maxBombs) {
+                    if (activeBombs < maxBombs && bomber) {
                         Bomb *bomb = new Bomb(world, this);
                         if (!world->addEntity(bomb,this->bomber->pos()))
                         {
@@ -134,6 +135,9 @@ void Player::onNewEntity(char type, char id, QPoint pos)
 
 void Player::onEntityDestroyed(char type, char id)
 {
+    if (id == this->id) {
+        bomber = NULL;
+    }
     char buffer[3] = {DESTROYED, type, id};
     socket->write(buffer, 3);
 }
