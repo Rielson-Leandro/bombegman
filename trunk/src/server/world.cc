@@ -44,7 +44,7 @@ void World::subscribeToServer(const QHostAddress &host, quint16 port)
 
 void World::onNewConnection()
 {
-    if(players.size() <= 4)
+    if(players.size() <= 4 && (!players.size() || players.size() > matchRequestsNumber))
     {
         QTcpSocket *socket = server->nextPendingConnection();
         Bomber *bomber = new Bomber(this);

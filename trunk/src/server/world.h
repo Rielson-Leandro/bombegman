@@ -49,7 +49,6 @@ private slots:
 private:
     void subscribeToServer(const QHostAddress &host, quint16 port);
 
-private:
     QHostAddress subscriptionServerHostAddress;
     quint16 subscriptionServerPort;
 
