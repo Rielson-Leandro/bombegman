@@ -139,10 +139,12 @@ void World::requestExplosion(const QPoint &pos, int range)
 
     //First let's explode in the X direction:
         //To the left:
+    int leftRange = 0;
     for(int i = 0; i >= -range && !foundObstruction; i--)
     {
         if (map->getTile(pos.x() + i, pos.y()).space != Map::Tile::EMPTY) {
             foundObstruction = true;
+            --leftRange;
         }
         if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::BRICK) {
             map->getTile(pos.x() + i, pos.y()).space = Map::Tile::EMPTY;
@@ -156,13 +158,16 @@ void World::requestExplosion(const QPoint &pos, int range)
             e->explode();
             deadEntities << e;
         }
+        ++leftRange;
     }
         //To the right:
+    int rightRange = 0;
     foundObstruction = false;
     for(int i = 0; i <= range && !foundObstruction; i++)
     {
         if (map->getTile(pos.x() + i, pos.y()).space != Map::Tile::EMPTY) {
             foundObstruction = true;
+            --rightRange;
         }
         if (map->getTile(pos.x() + i, pos.y()).space == Map::Tile::BRICK) {
             map->getTile(pos.x() + i, pos.y()).space = Map::Tile::EMPTY;
@@ -176,15 +181,18 @@ void World::requestExplosion(const QPoint &pos, int range)
             e->explode();
             deadEntities << e;
         }
+        ++rightRange;
     }
 
     //Now, we must do the same to the Y direction:
         //Upwards:
     foundObstruction = false;
+    int upwardsRange = 0;
     for(int i = 0; i >= -range && !foundObstruction; i--)
     {
         if (map->getTile(pos.x(), pos.y() + i).space != Map::Tile::EMPTY) {
             foundObstruction = true;
+            --upwardsRange;
         }
         if (map->getTile(pos.x(), pos.y() + i).space == Map::Tile::BRICK) {
             map->getTile(pos.x(), pos.y() + i).space = Map::Tile::EMPTY;
@@ -198,13 +206,16 @@ void World::requestExplosion(const QPoint &pos, int range)
             e->explode();
             deadEntities << e;
         }
+        ++upwardsRange;
     }
         //And downwards:
     foundObstruction = false;
+    int downwardsRange = 0;
     for(int i = 0; i <= range && !foundObstruction; i++)
     {
         if (map->getTile(pos.x(), pos.y() + i).space != Map::Tile::EMPTY) {
             foundObstruction = true;
+            --downwardsRange;
         }
         if (map->getTile(pos.x(), pos.y() + i).space == Map::Tile::BRICK) {
             map->getTile(pos.x(), pos.y() + i).space = Map::Tile::EMPTY;
@@ -218,6 +229,7 @@ void World::requestExplosion(const QPoint &pos, int range)
             e->explode();
             deadEntities << e;
         }
+        ++downwardsRange;
     }
 
     //Collecting the dead bodies:
@@ -226,4 +238,6 @@ void World::requestExplosion(const QPoint &pos, int range)
         map->removeEntity(e);
         delete e;
     }
+
+    emit explosion(pos, upwardsRange, rightRange, downwardsRange, leftRange);
 }

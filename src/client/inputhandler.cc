@@ -10,7 +10,7 @@ InputHandler::InputHandler(QObject *parent) :
 void InputHandler::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
-    case Qt::Key_Z:
+    case Qt::Key_Space:
         emit requestInput(BOMB_KEY_PRESS);
     case Qt::Key_Up:
     case Qt::Key_Right:
@@ -38,7 +38,7 @@ void InputHandler::keyReleaseEvent(QKeyEvent *e)
     case Qt::Key_Left:
         emit requestMovement(WEST);
         break;
-    case Qt::Key_Z:
+    case Qt::Key_Space:
         emit requestInput(BOMB_KEY_RELEASE);
     }
 }

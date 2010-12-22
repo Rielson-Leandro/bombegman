@@ -9,6 +9,7 @@ Bomb::Bomb(World *world, Player *player) :
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
     timer.start(3000);
+    timer.setSingleShot(true);
 }
 
 void Bomb::explode()

@@ -5,8 +5,12 @@ Player::Player(QTcpSocket *socket, Bomber *bomber, QObject *parent) :
     QObject(parent),
     socket(socket),
     bomber(bomber),
-    world(bomber->world())
+    world(bomber->world()),
+    activeBombs(0),
+    maxBombs(2)
 {
+    movementLock.setSingleShot(true);
+
     qDebug("A client has connected...");
     quint8 id = bomber->getId();
     socket->write(reinterpret_cast <const char *> (&id), 1);
@@ -68,9 +72,10 @@ void Player::onReadyRead()
         case MOVEMENT:
             if (buffer.size() > 1)
             {
-                if (bomber->world()->requestMovement(bomber, buffer[1]))
-                    qDebug("Player %i moving %c", (int)(bomber->getId()),
-                           (char)(buffer[1]));
+                if (!movementLock.isActive()) {
+                    bomber->world()->requestMovement(bomber, buffer[1]);
+                    movementLock.start(200);
+                }
 
                 buffer.remove(0, 2);
             } else {
@@ -82,16 +87,16 @@ void Player::onReadyRead()
             {
                 switch ((int)(buffer[1])) {
                 case BOMB_KEY_PRESS:
-                    {
+                    if (activeBombs < maxBombs) {
                         Bomb *bomb = new Bomb(world, this);
                         if (!world->addEntity(bomb,this->bomber->pos()))
                         {
                             delete bomb;
                         }
-
-                        buffer.remove(0, 2);
-                        break;
+                        ++activeBombs;
                     }
+                    buffer.remove(0, 2);
+                    break;
                 case BOMB_KEY_RELEASE:
                     buffer.remove(0, 2);
                     break;

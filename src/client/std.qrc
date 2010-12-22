@@ -20,5 +20,12 @@
         <file>gfx/empty.png</file>
         <file>gfx/wall.png</file>
         <file>gfx/background.png</file>
+        <file>gfx/expc.png</file>
+        <file>gfx/expe.png</file>
+        <file>gfx/exph.png</file>
+        <file>gfx/expn.png</file>
+        <file>gfx/exps.png</file>
+        <file>gfx/expv.png</file>
+        <file>gfx/expw.png</file>
     </qresource>
 </RCC>
