@@ -24,7 +24,7 @@ Map::Map(QObject *parent) :
         m_height = settings->height;
     }
 
-    if (settings->density > 10 | settings->density < 0)
+    if (settings->density > 10 || settings->density < 0)
     {
         qWarning("WARNING: density parameter should be between 0 and 10. Setting to default.");
         density = settings < 0 ? 0 : 10;
