@@ -14,15 +14,17 @@ public:
     explicit Bomb(World *world, Player *player = NULL);
     void explode();
     char getType();
+    ~Bomb();
 
 private slots:
     void onTimeOut();
 
 private:
     Player *owner;
-    bool exploded;
+    volatile bool exploded;
     int range;
     QTimer timer;
 };
 
 #endif // BOMB_H
+

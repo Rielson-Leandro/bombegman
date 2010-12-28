@@ -236,8 +236,9 @@ void World::requestExplosion(const QPoint &pos, int range)
     foreach (MapEntity *e, deadEntities) {
         emit entityDestroyed(e->getType(), e->getId());
         map->removeEntity(e);
-        delete e;
+//        delete e;
     }
 
     emit explosion(pos, upwardsRange, rightRange, downwardsRange, leftRange);
 }
+
