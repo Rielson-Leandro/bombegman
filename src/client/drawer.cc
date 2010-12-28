@@ -113,7 +113,7 @@ void Drawer::requestEntityDestroyed(MapEntity entity)
     } else {
         QGraphicsObject *item = entities.value(entity.id, NULL);
         scene->removeItem(item);
-        delete item;
+//        delete item;
     }
 }
 
@@ -196,3 +196,4 @@ void Drawer::removeReadyButton()
         sceneHasReadyButton = false;
     }
 }
+

@@ -5,6 +5,7 @@
 Bomb::Bomb(World *world, Player *player) :
     MapEntity(world),
     owner(player),
+    exploded(false),
     range(2)
 {
     connect(&timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
@@ -16,6 +17,7 @@ void Bomb::explode()
 {
     if(!exploded){
         exploded = true;
+        disconnect(&timer, SIGNAL(timeout()), this, SLOT(onTimeOut()));
         world()->requestExplosion(pos(), range);
         if(owner)
         {
@@ -33,3 +35,9 @@ char Bomb::getType()
 {
     return BOMB;
 }
+
+
+Bomb::~Bomb()
+{
+}
+
