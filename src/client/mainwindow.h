@@ -16,9 +16,6 @@ public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-private slots:
-    void onConnectionRequested(const QHostAddress &address, quint16 port);
-
 private:
     QGraphicsScene *menuScene;
     QGraphicsView *view;

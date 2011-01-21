@@ -1,11 +1,11 @@
-#include "connectdialog.h"
+#include "connectiondialog.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QListWidget>
 #include <QPushButton>
 #include <QTcpSocket>
 
-ConnectDialog::ConnectDialog(const QHostAddress &add, quint16 port,
+ConnectionDialog::ConnectionDialog(const QHostAddress &add, quint16 port,
                              QWidget *parent) :
         QWidget(parent),
         list(new QListWidget),
@@ -35,13 +35,13 @@ ConnectDialog::ConnectDialog(const QHostAddress &add, quint16 port,
     setLayout(l);
 }
 
-ConnectDialog::~ConnectDialog()
+ConnectionDialog::~ConnectionDialog()
 {
     delete list;
     delete socket;
 }
 
-void ConnectDialog::onConnectButtonClicked()
+void ConnectionDialog::onConnectButtonClicked()
 {
     if (QListWidgetItem *i = list->currentItem()) {
         emit connectionRequested(QHostAddress(i->data(Qt::UserRole).toString()),
@@ -49,18 +49,18 @@ void ConnectDialog::onConnectButtonClicked()
     }
 }
 
-void ConnectDialog::onRefreshButtonCLicked()
+void ConnectionDialog::onRefreshButtonCLicked()
 {
     list->clear();
     socket->connectToHost(host, port);
 }
 
-void ConnectDialog::onConnected()
+void ConnectionDialog::onConnected()
 {
     socket->write("LISTALL bombegman/0.2\n");
 }
 
-void ConnectDialog::onReadyRead()
+void ConnectionDialog::onReadyRead()
 {
     buffer.append(socket->readAll());
     for (int i = buffer.indexOf('\n');buffer.indexOf('\n') != -1;i = buffer.indexOf('\n')) {

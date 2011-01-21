@@ -7,13 +7,13 @@
 class QTcpSocket;
 class QListWidget;
 
-class ConnectDialog : public QWidget
+class ConnectionDialog : public QWidget
 {
     Q_OBJECT
 public:
-    explicit ConnectDialog(const QHostAddress &add, quint16 port,
-                           QWidget *parent = 0);
-    ~ConnectDialog();
+    explicit ConnectionDialog(const QHostAddress &add, quint16 port,
+                              QWidget *parent = 0);
+    ~ConnectionDialog();
 
 signals:
     void connectionRequested(QHostAddress address, quint16 port);

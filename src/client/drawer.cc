@@ -2,6 +2,7 @@
 #include <QGraphicsScene>
 #include <QPushButton>
 #include <QGraphicsProxyWidget>
+#include "connectiondialog.h"
 #include "protocol.h"
 #include "tileitem.h"
 #include "playeritem.h"
@@ -9,25 +10,46 @@
 #include "explosiontileitem.h"
 #include <QPropertyAnimation>
 #include <QTimeLine>
+#include "world.h"
 #include <QDebug>
 
-Drawer::Drawer(QGraphicsScene *scene, QObject *parent) :
+#define DEFAULT_CENTRAL_SERVER_HOST "127.0.0.1"
+#define DEFAULT_CENTRAL_SERVER_PORT 50000
+
+Drawer::Drawer(World *world, QGraphicsScene *scene, QObject *parent) :
     QObject(parent),
+    world(world),
     scene(scene),
+    connectionDialogItem(new QGraphicsProxyWidget),
     sceneHasReadyButton(false),
     button(new QPushButton("READY")),
     buttonItem(new QGraphicsProxyWidget)
 {
+    // menu management
+    scene->setBackgroundBrush(QBrush(QImage(":/gfx/background.png")));
+
+    ConnectionDialog *connectionDialog = new ConnectionDialog(QHostAddress(DEFAULT_CENTRAL_SERVER_HOST),
+                                                              DEFAULT_CENTRAL_SERVER_PORT);
+    connectionDialog->setFixedSize(200, 300);
+
+    connect(connectionDialog, SIGNAL(connectionRequested(QHostAddress,quint16)),
+            this, SLOT(onConnectionRequested(QHostAddress,quint16)));
+
+    connectionDialogItem->setWidget(connectionDialog);
+    connectionDialogItem->setPos(600, 300);
+    scene->addItem(connectionDialogItem);
+
+    // in-game initial menu
     buttonItem->setWidget(button);
-    connect(button, SIGNAL(clicked()), this, SIGNAL(removeButtonClicked()));
+    connect(button, SIGNAL(clicked()), this, SLOT(onMatchRequested()));
 }
 
 Drawer::~Drawer()
 {
     if (sceneHasReadyButton)
         scene->removeItem(buttonItem);
-    delete button;
     delete buttonItem;
+    delete button;
 }
 
 void Drawer::prepareMap(const QPoint dimensions, char map[16][16])
@@ -39,6 +61,10 @@ void Drawer::prepareMap(const QPoint dimensions, char map[16][16])
             item->setPos(32. * i, 32. * j);
             scene->addItem(item);
         }
+    }
+    if (!sceneHasReadyButton) {
+        scene->addItem(buttonItem);
+        sceneHasReadyButton = true;
     }
 }
 
@@ -181,19 +207,54 @@ void Drawer::requestExplosion(QPoint center, int northRange, int eastRange,
     }
 }
 
-void Drawer::addReadyButton()
+void Drawer::onConnectionRequested(const QHostAddress &address, quint16 port)
 {
-    if (!sceneHasReadyButton) {
-        scene->addItem(buttonItem);
-        sceneHasReadyButton = true;
+    if (world->connectToHost(address, port)) {
+        // removes menu
+        scene->removeItem(connectionDialogItem);
+
+        // prepares game graphical environment
+        scene->setBackgroundBrush(Qt::black);
     }
 }
 
-void Drawer::removeReadyButton()
+void Drawer::onMatchRequested()
 {
     if (sceneHasReadyButton) {
         scene->removeItem(buttonItem);
         sceneHasReadyButton = false;
+    }
+    emit matchRequested();
+}
+
+void Drawer::drawMainMenu()
+{
+    if (!connectionDialogItem->scene()) {
+        // clear the screen
+        for (int j = j;j < 16;++j) {
+            for (int i = 0;i < 16;++i) {
+                if (tiles[i][j]) {
+                    scene->removeItem(tiles[i][j]);
+                    delete tiles[i][j];
+                    tiles[i][j] = NULL;
+                }
+            }
+        }
+
+        for (QMap<int, QGraphicsObject *>::iterator i = entities.begin();i != entities.end();++i) {
+            scene->removeItem(i.value());
+            delete i.value();
+        }
+        entities.clear();
+
+        if (sceneHasReadyButton) {
+            scene->removeItem(buttonItem);
+            sceneHasReadyButton = false;
+        }
+
+        // draws the main menu
+        scene->setBackgroundBrush(QBrush(QImage(":/gfx/background.png")));
+        scene->addItem(connectionDialogItem);
     }
 }
 
