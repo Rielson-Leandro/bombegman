@@ -12,8 +12,7 @@ SOURCES += main.cc \
     drawer.cc \
     formatter.cc \
     inputhandler.cc \
-    connectdialog.cc \
-    menuscene.cc \
+    connectiondialog.cc \
     gamescene.cc \
     tileitem.cc \
     playeritem.cc \
@@ -25,8 +24,7 @@ HEADERS += mainwindow.h \
     drawer.h \
     formatter.h \
     inputhandler.h \
-    connectdialog.h \
-    menuscene.h \
+    connectiondialog.h \
     protocol.h \
     mapentity.h \
     gamescene.h \
