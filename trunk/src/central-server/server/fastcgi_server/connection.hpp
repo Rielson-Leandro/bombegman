@@ -19,20 +19,17 @@
 
 /* para escolher a implementacao */
 #include "../../server.hpp"
-#ifdef SERVER_USE_BOOST
+#ifdef SERVER_USE_FASTCGI
 
-#ifndef CENTRAL_SERVER_BOOST_CONNECTION_HPP
-#define CENTRAL_SERVER_BOOST_CONNECTION_HPP
-
+#ifndef CENTRAL_SERVER_FASTCGI_CONNECTION_HPP
+#define CENTRAL_SERVER_FASTCGI_CONNECTION_HPP
 
 /* #####   HEADER FILE INCLUDES   ########################################## */
 
+#include "my_fcgi.hpp"
 #include <string>
-#include <boost/asio.hpp>
-#include <boost/array.hpp>
+#include <sstream>
 #include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
 
 /* #####   EXPORTED MACROS   ############################################### */
 /* #####   EXPORTED TYPE DEFINITIONS   ##################################### */
@@ -41,7 +38,7 @@ using std::string;
 
 namespace boomberman {
 	namespace server {
-		namespace boost_impl {
+		namespace fastcgi_impl {
 
 			/** 
 			 * @brief Tipo do stream de saida de um cliente.
@@ -53,7 +50,7 @@ namespace boomberman {
 			 * o cliente.
 			 * Semelhante ao cin.
 			 */
-			typedef boost::asio::ip::tcp::iostream client_ostream;
+			typedef std::ostream client_ostream;
 			/** 
 			 * @brief Tipo do stream de entrada de um cliente.
 			 *
@@ -64,7 +61,7 @@ namespace boomberman {
 			 * via o stream de entrada.
 			 * Semelhante ao cout.
 			 */
-			typedef boost::asio::ip::tcp::iostream client_istream;
+			typedef std::stringstream client_istream;
 			/** 
 			 * @brief Tipo da função de callback que trata clientes.
 			 * 
@@ -82,8 +79,6 @@ namespace boomberman {
 
 /* #####   EXPORTED DATA TYPES   ########################################### */
 /* #####   EXPORTED CLASS DEFINITIONS   #################################### */
-/* #####   EXPORTED VARIABLES   ############################################ */
-/* #####   EXPORTED FUNCTION DECLARATIONS   ################################ */
 
 			/** 
 			 * @brief Representação da coneção de um cliente.
@@ -97,7 +92,8 @@ namespace boomberman {
 			 */
 			class connection
 				: public boost::enable_shared_from_this<connection>,
-				private boost::noncopyable
+				private boost::noncopyable,
+				public webcpp::RequestHandle
 			{
 				public:
 					/** 
@@ -113,60 +109,38 @@ namespace boomberman {
 					 * @brief Construtor que voce passa quem vai tratar as coneções
 					 *
 					 * Nesse construtor voçê passa o handle que trata a conexão
-					 * pela boost e quem vai tratar a conexão via stream dessa
+					 * pela fastcgi e quem vai tratar a conexão via stream dessa
 					 * conexão.
 					 * 
-					 * @param io_service Handle da conexão que sera tratada
+					 * @param acceptor Handle da conexão que sera tratada
 					 * @param handle Handle que vai ser chamado via callback para tratar a conexão.
 					 */
 					template<typename fun>
-					connection(boost::asio::io_service& io_service,
-						fun handle )
-						: strand_(io_service),
-						socket_(io_service),
-						timer_(io_service)
+					connection(FCGX_Request& acceptor, fun handle )
+						: RequestHandle( acceptor )
 					{
 						this->connection_handle=handle;
 					}
 
-					/// Get the socket associated with the connection.
-					boost::asio::ip::tcp::socket& socket();
-
-					/// Start the first asynchronous operation for the connection.
-					void start();
-
-					tcp::iostream client;
-
 				private:
 					/// Handle completion of a read operation.
+					void run(){
+						handle_read();
+					}
+
 					void handle_read();
 
-					/// Handle completion of a write operation.
-					void handle_write(const boost::system::error_code& e);
-
-					/// Strand to ensure the connection's handlers are not called concurrently.
-					boost::asio::io_service::strand strand_;
-
-					/// Socket for the connection.
-					boost::asio::ip::tcp::socket socket_;
-
-					/// Buffer for incoming data.
-					boost::array<char, 8192> buffer_;
-
-					boost::asio::deadline_timer timer_;
-
-//					void close();
-					void close( const boost::system::error_code& error );
+					void close();
 
 			};
-
-			typedef boost::shared_ptr<connection> connection_ptr;
-
-		} // namespace boost_impl
+		} // namespace fastcgi_impl
 	} // namespace server
 } // namespace boomberman
 
-#endif // CENTRAL_SERVER_BOOST_CONNECTION_HPP
+/* #####   EXPORTED VARIABLES   ############################################ */
+/* #####   EXPORTED FUNCTION DECLARATIONS   ################################ */
 
-#endif // SERVER_USE_BOOST
+#endif // CENTRAL_SERVER_FASTCGI_CONNECTION_HPP
+
+#endif // SERVER_USE_FASTCGI
 
