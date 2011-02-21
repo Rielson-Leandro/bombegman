@@ -1,9 +1,9 @@
 #ifndef CENTRAL_SERVER_HPP
 #define CENTRAL_SERVER_HPP
 
-#define	SERVER_USE_BOOST 1
+#define	SERVER_USE_BOOST
 
-#if	SERVER_USE_BOOST
+#ifdef	SERVER_USE_BOOST
 	#include "server/boost_server/server.hpp"
 
 	#define	SERVER_TYPE boomberman::server::boost_impl::server
@@ -11,12 +11,21 @@
 	#define CLIENT_OSTREAM boomberman::server::boost_impl::client_ostream
 	#define CLIENT_ISTREAM boomberman::server::boost_impl::client_istream
 
-#elif	SERVER_USE_QT
+#elif	defined(SERVER_USE_QT)
 	#include "server/qt_server/server.hpp"
 
 	#define	SERVER_TYPE boomberman::server::qt_impl::server
 	#define HANDLE_CLIENT boomberman::server::qt_impl::Handle_function
-	#define CLIENT_STREAM boomberman::server::qt_impl::client_stream
+	#define CLIENT_OSTREAM boomberman::server::qt_impl::client_ostream
+	#define CLIENT_ISTREAM boomberman::server::qt_impl::client_istream
+
+#elif	defined(SERVER_USE_FASTCGI)
+	#include "server/fastcgi_server/server.hpp"
+
+	#define	SERVER_TYPE boomberman::server::fastcgi_impl::server
+	#define HANDLE_CLIENT boomberman::server::fastcgi_impl::Handle_function
+	#define CLIENT_OSTREAM boomberman::server::fastcgi_impl::client_ostream
+	#define CLIENT_ISTREAM boomberman::server::fastcgi_impl::client_istream
 
 #else
 	#error "No implementation choosen."

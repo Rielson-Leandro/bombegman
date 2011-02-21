@@ -1,3 +1,22 @@
+/*
+ * Copyright © 2011 - Baltazar Tavares Vanderlei (Psycho Mantys)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ */
+
 /* #####   HEADER FILE INCLUDES   ########################################## */
 #include "server.hpp"
 #include "games.hpp"
@@ -81,7 +100,7 @@ void game_server::unsubscribe(const string &server, const string &gameService,
 		return;
 	}
 
-	services[gameService].remove( Game(server, port, 0,0) );
+	services[gameService].remove( Game(server, port) );
 }
 
 void game_server::unsubscribe( const Game& new_game, const string &gameService )
@@ -124,8 +143,9 @@ void game_server::ready_read( client_ostream &oclient, client_istream &iclient, 
 		}
 
 		for_each(request->second.begin(), request->second.end(), fe_print_game<client_ostream>(oclient) );
-		//for_each(services[server_addr].begin(),services[server_addr].end(), fe_print_game<std::ostream>(std::cout) );
+		for_each(services[server_addr].begin(),services[server_addr].end(), fe_print_game<std::ostream>(std::clog) );
 	}
+	for_each(services[server_addr].begin(),services[server_addr].end(), fe_print_game<std::ostream>(std::clog) );
 }
 
 bool Game::operator ==(const Game& r){

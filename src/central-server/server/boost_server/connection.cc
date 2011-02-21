@@ -1,30 +1,53 @@
+/*
+ * Copyright © 2011 - Baltazar Tavares Vanderlei (Psycho Mantys)
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 3
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * 
+ */
+
 /* para escolher a implementacao */
 #include "../../server.hpp"
 #ifdef SERVER_USE_BOOST
 
 
+/* #####   HEADER FILE INCLUDES   ########################################## */
 #include "connection.hpp"
 #include <vector>
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
-
-#include <iostream>
 #include <exception>
+
+/* So precisa para os cout e fazer o debug no estilo printf */
+#include <iostream>
+
+/* #####   MACROS  -  LOCAL TO THIS SOURCE FILE   ########################## */
+/* #####   TYPE DEFINITIONS  -  LOCAL TO THIS SOURCE FILE   ################ */
 
 namespace boomberman {
 	namespace server {
 		namespace boost_impl {
 
-/*		connection::connection(boost::asio::io_service& io_service,
-			Handle_function handle )
-			: strand_(io_service),
-			socket_(io_service),
-			timer_(io_service)
-		{
-			this->connection_handle=handle;
-		}
-*/
+/* #####   DATA TYPES  -  LOCAL TO THIS SOURCE FILE   ###################### */
+/* #####   CLASS DEFINITIONS  -  LOCAL TO THIS SOURCE FILE   ############### */
+/* #####   VARIABLES  -  LOCAL TO THIS SOURCE FILE   ####################### */
+/* #####   PROTOTYPES  -  LOCAL TO THIS SOURCE FILE   ###################### */
+/* #####   FUNCTION DEFINITIONS  -  EXPORTED FUNCTIONS   ################### */
+/* #####   FUNCTION DEFINITIONS  -  LOCAL TO THIS SOURCE FILE   ############ */
+/* #####   CLASS IMPLEMENTATIONS  -  EXPORTED CLASSES   #################### */
+
 		boost::asio::ip::tcp::socket& connection::socket()
 		{
 			return socket_;
@@ -38,7 +61,6 @@ namespace boomberman {
 		}
 
 		void connection::close( const boost::system::error_code& error )
-//		void connection::close()
 		{
 			// Initiate graceful connection closure.
 			if( ! error ){
@@ -101,11 +123,13 @@ namespace boomberman {
 				socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ignored_ec);
 			}
 
-			// No new asynchronous operations are started. This means that all shared_ptr
-			// references to the connection object will disappear and the object will be
-			// destroyed automatically after this handler returns. The connection class's
-			// destructor closes the socket.
+			//No new asynchronous operations are started. This means that all shared_ptr
+			//references to the connection object will disappear and the object will be
+			//destroyed automatically after this handler returns. The connection class's
+			//destructor closes the socket.
 		}
+
+/* #####   CLASS IMPLEMENTATIONS  -  LOCAL CLASSES   ####################### */
 
 		} // namespace boost_impl
 	} // namespace server
